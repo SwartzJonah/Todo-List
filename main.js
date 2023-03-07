@@ -23,7 +23,8 @@ const todoFactory = (title, dueDate, priority, description, checkbox) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "projectFactory": () => (/* binding */ projectFactory)
+/* harmony export */   "projectFactory": () => (/* binding */ projectFactory),
+/* harmony export */   "projectsHolder": () => (/* binding */ projectsHolder)
 /* harmony export */ });
 const projectFactory = (title, todoList, description) => {
     
@@ -31,6 +32,13 @@ const projectFactory = (title, todoList, description) => {
     return {title, todoList, description, showTodo};
 }
 
+const defaultProject = projectFactory("Default", [], "Default Project");
+
+const projectsHolder = (() => {
+    const projectsArray = [];
+    projectsArray.push(defaultProject);
+    return { projectsArray};
+})();
 
 /***/ })
 /******/ 	]);
@@ -104,8 +112,9 @@ __webpack_require__.r(__webpack_exports__);
 const dance = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoFactory)("dancing", "1/7");
 const project = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectFactory)("yahoo", [2,3], "bigdance")
 
-dance.sayTitle();
-project.showTodo();
+console.log(dance);
+console.log(project);
+console.log(_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectsHolder);
 })();
 
 /******/ })()
