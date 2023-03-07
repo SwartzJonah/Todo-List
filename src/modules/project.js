@@ -1,5 +1,5 @@
 export const projectUI = () => {
-    
+
     const projectFactory = (title, todoList, description) => {
 
         const showTodo = () => console.log(todoList);
@@ -13,5 +13,5 @@ export const projectUI = () => {
     const projectsArray = [];
     projectsArray.push(defaultProject);
         
-return {projectFactory, projectsArray}
+    return { projectFactory };
 };

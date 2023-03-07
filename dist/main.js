@@ -29,7 +29,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "projectUI": () => (/* binding */ projectUI)
 /* harmony export */ });
 const projectUI = () => {
-    
+
     const projectFactory = (title, todoList, description) => {
 
         const showTodo = () => console.log(todoList);
@@ -43,7 +43,7 @@ const projectUI = () => {
     const projectsArray = [];
     projectsArray.push(defaultProject);
         
-return {projectFactory, projectsArray}
+    return { projectFactory };
 };
 
 /***/ }),
@@ -55,27 +55,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad)
 /* harmony export */ });
 function initialPageLoad() {
+
     //Make Header
     const headerDiv = document.querySelector("#header");
 
-    const sidebarDiv = document.querySelector("sidebar");
+    const sidebarDiv = document.querySelector("#sidebar");
+        const sidebarList = document.createElement("ul");
+            sidebarList.classList.add("sidebarlist");
+            const allTodos = document.createElement("li");
+            allTodos.textContent = "Todos!";
+            const dueToday = document.createElement("li");
+            dueToday.textContent = "Due Today!";
+            const dueWeek = document.createElement("li");
+            dueWeek.textContent = "Due This Week!";
+            const projectsList = document.createElement("li");
+            projectsList.textContent = "Projects";
+            const actualList =  document.createElement("ul");
+            actualList.classList.add("projectslist");
+                const defaultProject = document.createElement("li");
+                defaultProject.textContent = "Default";
+            actualList.appendChild(defaultProject);
+            sidebarList.appendChild(allTodos);
+            sidebarList.appendChild(dueToday);
+            sidebarList.appendChild(dueWeek);
+            sidebarList.appendChild(projectsList);
+            sidebarList.appendChild(actualList);
+    sidebarDiv.appendChild(sidebarList);
     //things do today
     //things due this week
     //Projects with list of projects inside
     //button to add projects
-    
+
 
     const displayDiv = document.querySelector("#display");
     //displays the todo's for whatever is selected on sidebar
     //button to add todo's
 
-    
+
     //Div for content panel which includes invisble forms for todos and projects
     const contentDiv = document.querySelector("#content");
-
-    
-    
-
 
 }
 
@@ -143,18 +161,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _modules_project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony import */ var _modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-!console.log("hello");
 //import { compareAsc, format } from 'date-fns';
 
 
 
+//starter states
+    const date = new Date();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let currentDate = `${month}-${day}-${year}`;
 
-
+(0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
 const dance = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory("dancing", "1/7");
 const projecttest = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory("pewProject", [dance], "test")
 
+
 console.log(dance);
-console.log(projecttest)
+console.log(projecttest);
+
 
 })();
 
