@@ -11,7 +11,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 const todoUI= () => {
 
-    const todoFactory = (title, dueDate, priority, description, checkbox) => {
+    const todoFactory = (title, dueDate, description, priority, checkbox) => {
         const sayTitle = () => console.log("I am a todo");
         return {title, dueDate, priority, description, checkbox, sayTitle };
     };
@@ -36,6 +36,7 @@ const projectUI = () => {
         return { title, todoList, description, showTodo };
     }
 
+    const alltasks = projectFactory("All Todos", [], "List of every todo")
     const dueTodayProject = projectFactory("Due Today", [], "Todo's that must be done by today!");
     const dueWeekProject = projectFactory("Due Today", [], "Todo's that must be done this week!")
     const defaultProject = projectFactory("Default", [], "Default Project");
@@ -166,15 +167,46 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //starter states
-    const date = new Date();
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let currentDate = `${month}-${day}-${year}`;
-
+const date = new Date();
+let day = date.getDate();
+let month = date.getMonth() + 1;
+let year = date.getFullYear();
+let currentDate = `${month}-${day}-${year}`;
 (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
+
+
+//forms
+const todoform = document.querySelector("#todoform");
+todoform.addEventListener("submit", (event) => {
+    let todoTitle = todoform.elements['title'];
+    let todoDescription = todoform.elements['description'];
+    let todoDate = todoform.elements['duedate'];
+    let todoPriority = todoform.elements['priority'];
+    let todoCompleted = todoform.elements['completed'];
+    console.log(todoTitle.value);
+    console.log(todoDescription.value);
+    console.log(todoDate.value);
+    console.log(todoPriority.value);
+    console.log(todoCompleted.checked);
+    event.preventDefault();
+});
+
+
+const projectform = document.querySelector("#projectform");
+projectform.addEventListener("submit", (event) => {
+    let projectTitle = projectform.elements['title'];
+    let projectDescription = projectform.elements['description']
+    console.log(projectTitle.value);
+    console.log(projectDescription.value);
+    let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory(projectTitle.value, [1, 2], projectDescription.value);
+    console.log(projectToAdd);
+    projectform.reset();
+    event.preventDefault();
+});
+
+
 const dance = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory("dancing", "1/7");
-const projecttest = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory("pewProject", [dance], "test")
+const projecttest = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory("pewProject", [dance], "test");
 
 
 console.log(dance);
