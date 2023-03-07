@@ -1,15 +1,35 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ([
 /* 0 */,
 /* 1 */
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "todoFactory": () => (/* binding */ todoFactory)
+/* harmony export */ });
 const todoFactory = (title, dueDate, priority, description, checkbox) => {
-    const sayTitle = () => console.log("this is my title");
-    return {title, dueDate, priority, description, checkbox };
+    const sayTitle = () => console.log("I am a todo");
+    return {title, dueDate, priority, description, checkbox, sayTitle };
 };
 
-const dance = todoFactory("dancing");
+
+
+
+/***/ }),
+/* 2 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "projectFactory": () => (/* binding */ projectFactory)
+/* harmony export */ });
+const projectFactory = (title, todoList, description) => {
+    
+    const showTodo = () => console.log(todoList);
+    return {title, todoList, description, showTodo};
+}
 
 
 /***/ })
@@ -40,18 +60,6 @@ const dance = todoFactory("dancing");
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -82,17 +90,22 @@ const dance = todoFactory("dancing");
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_modules_todo__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _modules_project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 !console.log("hello");
 //import { compareAsc, format } from 'date-fns';
 
 
 
+
+const dance = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoFactory)("dancing", "1/7");
+const project = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectFactory)("yahoo", [2,3], "bigdance")
+
+dance.sayTitle();
+project.showTodo();
 })();
 
 /******/ })()

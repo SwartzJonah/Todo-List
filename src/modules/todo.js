@@ -1,6 +1,6 @@
-const todoFactory = (title, dueDate, priority, description, checkbox) => {
-    const sayTitle = () => console.log("this is my title");
-    return {title, dueDate, priority, description, checkbox };
+export const todoFactory = (title, dueDate, priority, description, checkbox) => {
+    const sayTitle = () => console.log("I am a todo");
+    return {title, dueDate, priority, description, checkbox, sayTitle };
 };
 
-const dance = todoFactory("dancing");
+
