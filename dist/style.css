@@ -1,0 +1,28 @@
+body{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+#header{
+    background-color: blue;
+    min-height: 10vh;
+    min-width: 100vw;
+    
+}
+
+#content{
+    display: flex;
+    background-color: red;
+    min-height: 90vh;
+}
+
+#sidebar{
+    background-color: yellow;
+    min-width: 20vw;
+}
+
+#display{
+    background-color: green;
+    min-width: 80vw;
+}
