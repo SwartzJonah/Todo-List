@@ -15,7 +15,14 @@ const todoUI= () => {
         const sayTitle = () => console.log("I am a todo");
         return {title, dueDate, priority, description, checkbox, sayTitle };
     };
+
+
+    function addTodo(todo, project) {
+        project.todoList.push(todo);
+    };
+
 return{ todoFactory };
+
 };
 
 
@@ -28,6 +35,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "projectUI": () => (/* binding */ projectUI)
 /* harmony export */ });
+
 const projectUI = () => {
 
     const projectFactory = (title, todoList, description) => {
@@ -35,7 +43,7 @@ const projectUI = () => {
         const showTodo = () => console.log(todoList);
         return { title, todoList, description, showTodo };
     }
-
+    const actualList = document.querySelector(".actualList");
     const alltasks = projectFactory("All Todos", [], "List of every todo")
     const dueTodayProject = projectFactory("Due Today", [], "Todo's that must be done by today!");
     const dueWeekProject = projectFactory("Due Today", [], "Todo's that must be done this week!")
@@ -45,11 +53,20 @@ const projectUI = () => {
    // projectsArray.push(defaultProject);
 
     function addProject(project, array){
+        console.log(project.title);
+        const projectTitle = project.title;
+        const divAdd = document.createElement("li");
+        divAdd.textContent = projectTitle;
+        console.log(divAdd);
+        console.log(actualList);
+        actualList.appendChild(divAdd);
         array.push(project);
+
         return array;
     }
         
-    return { projectFactory, addProject };
+return { projectFactory, addProject };
+
 };
 
 /***/ }),
@@ -83,10 +100,7 @@ function initialPageLoad() {
             const projectsList = document.createElement("li");
             projectsList.textContent = "Projects";
             const actualList =  document.createElement("ul");
-            actualList.classList.add("projectslist");
-                const defaultProject = document.createElement("li");
-                defaultProject.textContent = "Default";
-            actualList.appendChild(defaultProject);
+            actualList.classList.add("actualList");
             sidebarList.appendChild(allTodos);
             sidebarList.appendChild(dueToday);
             sidebarList.appendChild(dueWeek);
@@ -178,6 +192,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //starter states
+(0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
 const date = new Date();
 let day = date.getDate();
 let month = date.getMonth() + 1;
@@ -189,7 +204,7 @@ const defaultProject = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectU
 console.log(projectsArray);
 //This will tell file what project is open
 let activePage = "allTodos";
-(0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
+
 
 
 
@@ -226,6 +241,8 @@ projectform.addEventListener("submit", (event) => {
     console.log(projectsArray);
     //projectform.reset();
     event.preventDefault();
+    //adds to dom
+
 });
 
 
