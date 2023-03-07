@@ -7,13 +7,16 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "todoFactory": () => (/* binding */ todoFactory)
+/* harmony export */   "todoUI": () => (/* binding */ todoUI)
 /* harmony export */ });
-const todoFactory = (title, dueDate, priority, description, checkbox) => {
-    const sayTitle = () => console.log("I am a todo");
-    return {title, dueDate, priority, description, checkbox, sayTitle };
-};
+const todoUI= () => {
 
+    const todoFactory = (title, dueDate, priority, description, checkbox) => {
+        const sayTitle = () => console.log("I am a todo");
+        return {title, dueDate, priority, description, checkbox, sayTitle };
+    };
+return{ todoFactory };
+};
 
 
 
@@ -23,22 +26,58 @@ const todoFactory = (title, dueDate, priority, description, checkbox) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "projectFactory": () => (/* binding */ projectFactory),
-/* harmony export */   "projectsHolder": () => (/* binding */ projectsHolder)
+/* harmony export */   "projectUI": () => (/* binding */ projectUI)
 /* harmony export */ });
-const projectFactory = (title, todoList, description) => {
+const projectUI = () => {
     
-    const showTodo = () => console.log(todoList);
-    return {title, todoList, description, showTodo};
-}
+    const projectFactory = (title, todoList, description) => {
 
-const defaultProject = projectFactory("Default", [], "Default Project");
+        const showTodo = () => console.log(todoList);
+        return { title, todoList, description, showTodo };
+    }
 
-const projectsHolder = (() => {
+    const dueTodayProject = projectFactory("Due Today", [], "Todo's that must be done by today!");
+    const dueWeekProject = projectFactory("Due Today", [], "Todo's that must be done this week!")
+    const defaultProject = projectFactory("Default", [], "Default Project");
+
     const projectsArray = [];
     projectsArray.push(defaultProject);
-    return { projectsArray};
-})();
+        
+return {projectFactory, projectsArray}
+};
+
+/***/ }),
+/* 3 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad)
+/* harmony export */ });
+function initialPageLoad() {
+    //Make Header
+    const headerDiv = document.querySelector("#header");
+
+    const sidebarDiv = document.querySelector("sidebar");
+    //things do today
+    //things due this week
+    //Projects with list of projects inside
+    //button to add projects
+    
+
+    const displayDiv = document.querySelector("#display");
+    //displays the todo's for whatever is selected on sidebar
+    //button to add todo's
+
+    
+    //Div for content panel which includes invisble forms for todos and projects
+    const contentDiv = document.querySelector("#content");
+
+    
+    
+
+
+}
 
 /***/ })
 /******/ 	]);
@@ -103,18 +142,20 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var _modules_project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
 !console.log("hello");
 //import { compareAsc, format } from 'date-fns';
 
 
 
 
-const dance = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoFactory)("dancing", "1/7");
-const project = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectFactory)("yahoo", [2,3], "bigdance")
+
+const dance = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory("dancing", "1/7");
+const projecttest = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory("pewProject", [dance], "test")
 
 console.log(dance);
-console.log(project);
-console.log(_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectsHolder);
+console.log(projecttest)
+
 })();
 
 /******/ })()
