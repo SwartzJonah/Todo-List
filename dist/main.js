@@ -39,12 +39,17 @@ const projectUI = () => {
     const alltasks = projectFactory("All Todos", [], "List of every todo")
     const dueTodayProject = projectFactory("Due Today", [], "Todo's that must be done by today!");
     const dueWeekProject = projectFactory("Due Today", [], "Todo's that must be done this week!")
-    const defaultProject = projectFactory("Default", [], "Default Project");
+    //const defaultProject = projectFactory("Default", [], "Default Project");
 
-    const projectsArray = [];
-    projectsArray.push(defaultProject);
+    //const projectsArray = [];
+   // projectsArray.push(defaultProject);
+
+    function addProject(project, array){
+        array.push(project);
+        return array;
+    }
         
-    return { projectFactory };
+    return { projectFactory, addProject };
 };
 
 /***/ }),
@@ -55,6 +60,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad)
 /* harmony export */ });
+/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+
 function initialPageLoad() {
 
     //Make Header
@@ -64,7 +72,10 @@ function initialPageLoad() {
         const sidebarList = document.createElement("ul");
             sidebarList.classList.add("sidebarlist");
             const allTodos = document.createElement("li");
-            allTodos.textContent = "Todos!";
+            allTodos.addEventListener("click", (event) => {
+
+            });
+            allTodos.textContent = "All Todos!";
             const dueToday = document.createElement("li");
             dueToday.textContent = "Due Today!";
             const dueWeek = document.createElement("li");
@@ -172,7 +183,14 @@ let day = date.getDate();
 let month = date.getMonth() + 1;
 let year = date.getFullYear();
 let currentDate = `${month}-${day}-${year}`;
+const projectsArray = [];
+const defaultProject = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory("Default", [], "Default Project");
+(0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().addProject(defaultProject, projectsArray);
+console.log(projectsArray);
+//This will tell file what project is open
+let activePage = "allTodos";
 (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
+
 
 
 //forms
@@ -188,6 +206,11 @@ todoform.addEventListener("submit", (event) => {
     console.log(todoDate.value);
     console.log(todoPriority.value);
     console.log(todoCompleted.checked);
+    let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
+        todoTitle.value, todoDate.value, todoDescription.value, 
+        todoPriority.value,todoCompleted.checked);
+    console.log(todoToAdd);
+    //todoform.reset();
     event.preventDefault();
 });
 
@@ -196,21 +219,16 @@ const projectform = document.querySelector("#projectform");
 projectform.addEventListener("submit", (event) => {
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
-    console.log(projectTitle.value);
-    console.log(projectDescription.value);
-    let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory(projectTitle.value, [1, 2], projectDescription.value);
+    let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory(
+        projectTitle.value, [1, 2], projectDescription.value);
     console.log(projectToAdd);
-    projectform.reset();
+    (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().addProject(projectToAdd, projectsArray);
+    console.log(projectsArray);
+    //projectform.reset();
     event.preventDefault();
 });
 
 
-const dance = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory("dancing", "1/7");
-const projecttest = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory("pewProject", [dance], "test");
-
-
-console.log(dance);
-console.log(projecttest);
 
 
 })();

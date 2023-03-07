@@ -9,10 +9,15 @@ export const projectUI = () => {
     const alltasks = projectFactory("All Todos", [], "List of every todo")
     const dueTodayProject = projectFactory("Due Today", [], "Todo's that must be done by today!");
     const dueWeekProject = projectFactory("Due Today", [], "Todo's that must be done this week!")
-    const defaultProject = projectFactory("Default", [], "Default Project");
+    //const defaultProject = projectFactory("Default", [], "Default Project");
 
-    const projectsArray = [];
-    projectsArray.push(defaultProject);
+    //const projectsArray = [];
+   // projectsArray.push(defaultProject);
+
+    function addProject(project, array){
+        array.push(project);
+        return array;
+    }
         
-    return { projectFactory };
+    return { projectFactory, addProject };
 };

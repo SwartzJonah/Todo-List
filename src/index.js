@@ -1,6 +1,6 @@
 //import { compareAsc, format } from 'date-fns';
 import { todoUI } from "./modules/todo";
-import { projectUI } from "./modules/project";
+import { projectUI,} from "./modules/project";
 import { initialPageLoad } from "./modules/initial-page-load"
 //starter states
 const date = new Date();
@@ -8,7 +8,14 @@ let day = date.getDate();
 let month = date.getMonth() + 1;
 let year = date.getFullYear();
 let currentDate = `${month}-${day}-${year}`;
+const projectsArray = [];
+const defaultProject = projectUI().projectFactory("Default", [], "Default Project");
+projectUI().addProject(defaultProject, projectsArray);
+console.log(projectsArray);
+//This will tell file what project is open
+let activePage = "allTodos";
 initialPageLoad();
+
 
 
 //forms
@@ -24,6 +31,11 @@ todoform.addEventListener("submit", (event) => {
     console.log(todoDate.value);
     console.log(todoPriority.value);
     console.log(todoCompleted.checked);
+    let todoToAdd = todoUI().todoFactory(
+        todoTitle.value, todoDate.value, todoDescription.value, 
+        todoPriority.value,todoCompleted.checked);
+    console.log(todoToAdd);
+    //todoform.reset();
     event.preventDefault();
 });
 
@@ -32,19 +44,14 @@ const projectform = document.querySelector("#projectform");
 projectform.addEventListener("submit", (event) => {
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
-    console.log(projectTitle.value);
-    console.log(projectDescription.value);
-    let projectToAdd = projectUI().projectFactory(projectTitle.value, [1, 2], projectDescription.value);
+    let projectToAdd = projectUI().projectFactory(
+        projectTitle.value, [1, 2], projectDescription.value);
     console.log(projectToAdd);
-    projectform.reset();
+    projectUI().addProject(projectToAdd, projectsArray);
+    console.log(projectsArray);
+    //projectform.reset();
     event.preventDefault();
 });
 
 
-const dance = todoUI().todoFactory("dancing", "1/7");
-const projecttest = projectUI().projectFactory("pewProject", [dance], "test");
-
-
-console.log(dance);
-console.log(projecttest);
 

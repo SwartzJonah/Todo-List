@@ -1,3 +1,5 @@
+import { projectUI } from "./project";
+
 export function initialPageLoad() {
 
     //Make Header
@@ -7,7 +9,10 @@ export function initialPageLoad() {
         const sidebarList = document.createElement("ul");
             sidebarList.classList.add("sidebarlist");
             const allTodos = document.createElement("li");
-            allTodos.textContent = "Todos!";
+            allTodos.addEventListener("click", (event) => {
+
+            });
+            allTodos.textContent = "All Todos!";
             const dueToday = document.createElement("li");
             dueToday.textContent = "Due Today!";
             const dueWeek = document.createElement("li");
