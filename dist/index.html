@@ -10,37 +10,38 @@
 </head>
 <body>
     <div id="header"></div>
-    <div id="content">
-        <div id="todopopup">
-            <!--Form for todo's -->
-            <form id="todoform" action="" method="get"> 
-                <div class="inputOne">
-                    <input type="text" id='title' name='title' placeholder="Task" required>
-                    <input type="date" id='duedate' value="2023-03-01" min="2023-01-01" max ="2023-12-31" required>
-                    <input type="text" id='description' placeholder="Description" required>
-                </div>
-                <div class="inputTwo">
-                    <label>Light: &nbsp</label><input type="checkbox" name="priority" />
-                    <label>Normal: &nbsp</label><input type="checkbox" name="priority" />
-                    <label>Urgent: &nbsp</label><input type="checkbox" name="priority" />
-                </div>
-                <div class="inputThree">
-                    <label>Completed: &nbsp</label><input type="checkbox" id='completed' value='no'>
-                </div>
-                <button type="submit" form="todoform" id="todosubmitBtn">Add Todo</button>
-            </form>
-        </div>
 
-        <div id="projectpopup">
-            <!--Form for projects -->
-            <form id="projectform" action="" method="get"> 
-                <div class="inputs">
-                    <input type="text" id='title' name='title' placeholder="Project" required>
-                    <input type="text" id='description' placeholder="Description">
-                </div>
-                <button type="submit" form="projectform" id="projectsubmitBtn">Add Project</button>
-            </form>
-        </div>
+    <div id="todopopup">
+        <!--Form for todo's -->
+        <form id="todoform" action="" method="get"> 
+            <div class="inputOne">
+                <input type="text" id='title' name='title' placeholder="Task" required>
+                <input type="date" id='duedate' value="2023-03-01" min="2023-01-01" max ="2023-12-31" required>
+                <input type="text" id='description' placeholder="Description" required>
+            </div>
+            <div class="inputTwo">
+                <label>Light: &nbsp</label><input type="checkbox" name="priority" />
+                <label>Normal: &nbsp</label><input type="checkbox" name="priority" />
+                <label>Urgent: &nbsp</label><input type="checkbox" name="priority" />
+            </div>
+            <div class="inputThree">
+                <label>Completed: &nbsp</label><input type="checkbox" id='completed' value='no'>
+            </div>
+            <button type="submit" form="todoform" id="todosubmitBtn">Add Todo</button>
+        </form>
+    </div>
+
+    <div id="projectpopup">
+        <!--Form for projects -->
+        <form id="projectform" action="" method="get"> 
+            <div class="inputs">
+                <input type="text" id='title' name='title' placeholder="Project" required>
+                <input type="text" id='description' placeholder="Description">
+            </div>
+            <button type="submit" form="projectform" id="projectsubmitBtn">Add Project</button>
+        </form>
+    </div>
+    <div id="content">
         <div id="sidebar"></div>
         <div id="display"></div>
     </div>
