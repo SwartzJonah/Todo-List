@@ -3,6 +3,7 @@ import { todoUI } from "./modules/todo";
 import { projectUI,} from "./modules/project";
 import { initialPageLoad } from "./modules/initial-page-load"
 //starter states
+initialPageLoad();
 const date = new Date();
 let day = date.getDate();
 let month = date.getMonth() + 1;
@@ -14,7 +15,7 @@ projectUI().addProject(defaultProject, projectsArray);
 console.log(projectsArray);
 //This will tell file what project is open
 let activePage = "allTodos";
-initialPageLoad();
+
 
 
 
@@ -51,6 +52,8 @@ projectform.addEventListener("submit", (event) => {
     console.log(projectsArray);
     //projectform.reset();
     event.preventDefault();
+    //adds to dom
+
 });
 
 

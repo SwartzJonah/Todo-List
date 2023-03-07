@@ -20,10 +20,7 @@ export function initialPageLoad() {
             const projectsList = document.createElement("li");
             projectsList.textContent = "Projects";
             const actualList =  document.createElement("ul");
-            actualList.classList.add("projectslist");
-                const defaultProject = document.createElement("li");
-                defaultProject.textContent = "Default";
-            actualList.appendChild(defaultProject);
+            actualList.classList.add("actualList");
             sidebarList.appendChild(allTodos);
             sidebarList.appendChild(dueToday);
             sidebarList.appendChild(dueWeek);
