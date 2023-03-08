@@ -12,6 +12,5 @@ export const todoUI= () => {
     };
 
 return{ todoFactory, addTodo };
-
 };
 

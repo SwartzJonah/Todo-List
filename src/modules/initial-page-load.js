@@ -1,10 +1,21 @@
 import { projectUI } from "./project";
 let activePage = "all";
+let activeProject;
+let projectArray;
 
-export function pageChanger(newPage){
+export function pageChanger(newPage, array){
+    if(array != undefined){
+    projectArray = array;
+    }
+    console.log(projectArray);
     activePage = newPage;
-    console.log(activePage);
+    contentChanger(newPage, projectArray);
     return activePage;
+}
+
+function contentChanger(page,array){
+    activeProject = array.find(project => project.title == page);
+    console.log(activeProject);
 }
 
 export function initialPageLoad() {
@@ -27,7 +38,7 @@ export function initialPageLoad() {
             dueToday.textContent = "Due Today!";
             const dueWeek = document.createElement("li");
             dueWeek.addEventListener("click", (event) => {
-                console.log("dueNextWeek");
+                pageChanger("dueNextWeek");
             });
             dueWeek.textContent = "Due This Week!";
             const projectsList = document.createElement("li");

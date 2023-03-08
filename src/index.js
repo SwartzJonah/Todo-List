@@ -5,13 +5,12 @@ import { initialPageLoad, pageChanger } from "./modules/initial-page-load"
 //starter states
 initialPageLoad();
 const projectsArray = projectUI().setUpArray();
-console.log(projectsArray);
 
 //This will tell file what project is open
-let activePage = pageChanger("all");
+let activePage = pageChanger("all", projectsArray);
 
 let activeProject = projectsArray.find(project => project.title == activePage);
-console.log(activeProject);
+//console.log(activeProject);
 
 
 
@@ -26,17 +25,13 @@ todoform.addEventListener("submit", (event) => {
     let todoDate = todoform.elements['duedate'];
     let todoPriority = todoform.elements['priority'];
     let todoCompleted = todoform.elements['completed'];
-    console.log(todoTitle.value);
-    console.log(todoDescription.value);
-    console.log(todoDate.value);
-    console.log(todoPriority.value);
-    console.log(todoCompleted.checked);
     let todoToAdd = todoUI().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
         todoPriority.value,todoCompleted.checked);
     todoUI().addTodo(todoToAdd, activeProject);
     console.log(todoToAdd);
     console.log(activeProject);
+    console.log(projectsArray);
     //todoform.reset();
     event.preventDefault();
 });
