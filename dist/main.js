@@ -19,9 +19,10 @@ const todoUI= () => {
 
     function addTodo(todo, project) {
         project.todoList.push(todo);
+        return project;
     };
 
-return{ todoFactory };
+return{ todoFactory, addTodo };
 
 };
 
@@ -35,37 +36,65 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "projectUI": () => (/* binding */ projectUI)
 /* harmony export */ });
+/* harmony import */ var _initial_page_load__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
+
+const projectsArray = [];
+const date = new Date();
+let day = date.getDate();
+let month = date.getMonth() + 1;
+let year = date.getFullYear();
+let currentDate = `${month}-${day}-${year}`;
+let nextWeekDate = `${month}-${day+7}-${year}`;
 const projectUI = () => {
 
-    const projectFactory = (title, todoList, description) => {
+    const projectFactory = (title, todoList, description, deadline) => {
 
-        const showTodo = () => console.log(todoList);
-        return { title, todoList, description, showTodo };
+        return { title, todoList, description, deadline };
     }
+
+    function setUpArray() {
+        
+        const allTodos = projectFactory("all", [], "All todos");
+
+        const dueToday = projectFactory("dueToday", [], "things due today", currentDate);
+
+        const dueWeek = projectFactory("dueNextWeek", [], "things due next week", nextWeekDate);
+
+        const defaultProject = projectFactory("Default", [], "Default Project");
+
+        addProject(allTodos, projectsArray);
+        addProject(dueToday, projectsArray);
+        addProject(dueWeek, projectsArray);
+        addProject(defaultProject, projectsArray);
+        
+        return projectsArray;
+    }
+
     const actualList = document.querySelector(".actualList");
-    const alltasks = projectFactory("All Todos", [], "List of every todo")
-    const dueTodayProject = projectFactory("Due Today", [], "Todo's that must be done by today!");
-    const dueWeekProject = projectFactory("Due Today", [], "Todo's that must be done this week!")
+    //const alltasks = projectFactory("All Todos", [], "List of every todo")
+    //const dueTodayProject = projectFactory("Due Today", [], "Todo's that must be done by today!");
+    //const dueWeekProject = projectFactory("Due Today", [], "Todo's that must be done this week!")
     //const defaultProject = projectFactory("Default", [], "Default Project");
 
     //const projectsArray = [];
-   // projectsArray.push(defaultProject);
+    // projectsArray.push(defaultProject);
 
-    function addProject(project, array){
-        console.log(project.title);
-        const projectTitle = project.title;
-        const divAdd = document.createElement("li");
-        divAdd.textContent = projectTitle;
-        console.log(divAdd);
-        console.log(actualList);
-        actualList.appendChild(divAdd);
+    function addProject(project, array) {
+        if (project.title != "all" && project.title != "dueToday" && project.title != "dueNextWeek"){
+            const projectTitle = project.title;
+            const divAdd = document.createElement("li");
+            divAdd.addEventListener("click", (event) => {
+                (0,_initial_page_load__WEBPACK_IMPORTED_MODULE_0__.pageChanger)(projectTitle);
+            });
+            divAdd.textContent = projectTitle;
+            actualList.appendChild(divAdd);
+        }
         array.push(project);
-
         return array;
     }
-        
-return { projectFactory, addProject };
+
+    return { projectFactory, addProject, setUpArray };
 
 };
 
@@ -75,10 +104,18 @@ return { projectFactory, addProject };
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad)
+/* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad),
+/* harmony export */   "pageChanger": () => (/* binding */ pageChanger)
 /* harmony export */ });
 /* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
+let activePage = "all";
+
+function pageChanger(newPage){
+    activePage = newPage;
+    console.log(activePage);
+    return activePage;
+}
 
 function initialPageLoad() {
 
@@ -90,12 +127,18 @@ function initialPageLoad() {
             sidebarList.classList.add("sidebarlist");
             const allTodos = document.createElement("li");
             allTodos.addEventListener("click", (event) => {
-
+                pageChanger("all");
             });
             allTodos.textContent = "All Todos!";
             const dueToday = document.createElement("li");
+            dueToday.addEventListener("click", (event) => {
+                pageChanger("dueToday")
+            });
             dueToday.textContent = "Due Today!";
             const dueWeek = document.createElement("li");
+            dueWeek.addEventListener("click", (event) => {
+                console.log("dueNextWeek");
+            });
             dueWeek.textContent = "Due This Week!";
             const projectsList = document.createElement("li");
             projectsList.textContent = "Projects";
@@ -112,6 +155,7 @@ function initialPageLoad() {
     //Projects with list of projects inside
     //button to add projects
 
+   
 
     const displayDiv = document.querySelector("#display");
     //displays the todo's for whatever is selected on sidebar
@@ -193,17 +237,16 @@ __webpack_require__.r(__webpack_exports__);
 
 //starter states
 (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
-const date = new Date();
-let day = date.getDate();
-let month = date.getMonth() + 1;
-let year = date.getFullYear();
-let currentDate = `${month}-${day}-${year}`;
-const projectsArray = [];
-const defaultProject = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory("Default", [], "Default Project");
-(0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().addProject(defaultProject, projectsArray);
+const projectsArray = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().setUpArray();
 console.log(projectsArray);
+
 //This will tell file what project is open
-let activePage = "allTodos";
+let activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)("all");
+
+let activeProject = projectsArray.find(project => project.title == activePage);
+console.log(activeProject);
+
+
 
 
 
@@ -224,7 +267,9 @@ todoform.addEventListener("submit", (event) => {
     let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
         todoPriority.value,todoCompleted.checked);
+    (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, activeProject);
     console.log(todoToAdd);
+    console.log(activeProject);
     //todoform.reset();
     event.preventDefault();
 });
@@ -235,7 +280,7 @@ projectform.addEventListener("submit", (event) => {
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
     let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory(
-        projectTitle.value, [1, 2], projectDescription.value);
+        projectTitle.value, [], projectDescription.value);
     console.log(projectToAdd);
     (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().addProject(projectToAdd, projectsArray);
     console.log(projectsArray);

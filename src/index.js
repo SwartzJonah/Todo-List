@@ -1,20 +1,19 @@
 //import { compareAsc, format } from 'date-fns';
 import { todoUI } from "./modules/todo";
-import { projectUI,} from "./modules/project";
-import { initialPageLoad } from "./modules/initial-page-load"
+import { projectUI} from "./modules/project";
+import { initialPageLoad, pageChanger } from "./modules/initial-page-load"
 //starter states
 initialPageLoad();
-const date = new Date();
-let day = date.getDate();
-let month = date.getMonth() + 1;
-let year = date.getFullYear();
-let currentDate = `${month}-${day}-${year}`;
-const projectsArray = [];
-const defaultProject = projectUI().projectFactory("Default", [], "Default Project");
-projectUI().addProject(defaultProject, projectsArray);
+const projectsArray = projectUI().setUpArray();
 console.log(projectsArray);
+
 //This will tell file what project is open
-let activePage = "allTodos";
+let activePage = pageChanger("all");
+
+let activeProject = projectsArray.find(project => project.title == activePage);
+console.log(activeProject);
+
+
 
 
 
@@ -35,7 +34,9 @@ todoform.addEventListener("submit", (event) => {
     let todoToAdd = todoUI().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
         todoPriority.value,todoCompleted.checked);
+    todoUI().addTodo(todoToAdd, activeProject);
     console.log(todoToAdd);
+    console.log(activeProject);
     //todoform.reset();
     event.preventDefault();
 });
@@ -46,7 +47,7 @@ projectform.addEventListener("submit", (event) => {
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
     let projectToAdd = projectUI().projectFactory(
-        projectTitle.value, [1, 2], projectDescription.value);
+        projectTitle.value, [], projectDescription.value);
     console.log(projectToAdd);
     projectUI().addProject(projectToAdd, projectsArray);
     console.log(projectsArray);

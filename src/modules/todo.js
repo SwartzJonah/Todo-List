@@ -8,9 +8,10 @@ export const todoUI= () => {
 
     function addTodo(todo, project) {
         project.todoList.push(todo);
+        return project;
     };
 
-return{ todoFactory };
+return{ todoFactory, addTodo };
 
 };
 
