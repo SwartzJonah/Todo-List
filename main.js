@@ -23,7 +23,6 @@ const todoUI= () => {
     };
 
 return{ todoFactory, addTodo };
-
 };
 
 
@@ -110,11 +109,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
 let activePage = "all";
+let activeProject;
+let projectArray;
 
-function pageChanger(newPage){
+function pageChanger(newPage, array){
+    if(array != undefined){
+    projectArray = array;
+    }
+    console.log(projectArray);
     activePage = newPage;
-    console.log(activePage);
+    contentChanger(newPage, projectArray);
     return activePage;
+}
+
+function contentChanger(page,array){
+    activeProject = array.find(project => project.title == page);
+    console.log(activeProject);
 }
 
 function initialPageLoad() {
@@ -137,7 +147,7 @@ function initialPageLoad() {
             dueToday.textContent = "Due Today!";
             const dueWeek = document.createElement("li");
             dueWeek.addEventListener("click", (event) => {
-                console.log("dueNextWeek");
+                pageChanger("dueNextWeek");
             });
             dueWeek.textContent = "Due This Week!";
             const projectsList = document.createElement("li");
@@ -238,13 +248,12 @@ __webpack_require__.r(__webpack_exports__);
 //starter states
 (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
 const projectsArray = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().setUpArray();
-console.log(projectsArray);
 
 //This will tell file what project is open
-let activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)("all");
+let activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)("all", projectsArray);
 
 let activeProject = projectsArray.find(project => project.title == activePage);
-console.log(activeProject);
+//console.log(activeProject);
 
 
 
@@ -259,17 +268,13 @@ todoform.addEventListener("submit", (event) => {
     let todoDate = todoform.elements['duedate'];
     let todoPriority = todoform.elements['priority'];
     let todoCompleted = todoform.elements['completed'];
-    console.log(todoTitle.value);
-    console.log(todoDescription.value);
-    console.log(todoDate.value);
-    console.log(todoPriority.value);
-    console.log(todoCompleted.checked);
     let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
         todoPriority.value,todoCompleted.checked);
     (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, activeProject);
     console.log(todoToAdd);
     console.log(activeProject);
+    console.log(projectsArray);
     //todoform.reset();
     event.preventDefault();
 });
