@@ -1,4 +1,4 @@
-import { pageChanger } from "./initial-page-load"
+import { pageChanger, buttonAppear } from "./initial-page-load"
 
 const projectsArray = [];
 const date = new Date();
@@ -47,6 +47,7 @@ export const projectUI = () => {
             const divAdd = document.createElement("li");
             divAdd.addEventListener("click", (event) => {
                 pageChanger(projectTitle);
+                buttonAppear();
             });
             divAdd.textContent = projectTitle;
             actualList.appendChild(divAdd);

@@ -18,6 +18,7 @@ let currentDate = `${month}-${day}-${year}`;
 
 //starter states
 initialPageLoad();
+//sets up initial array
 const projectsArray = projectUI().setUpArray();
 
 //This will tell file what project is open
@@ -32,6 +33,7 @@ let activeProject = projectsArray.find(project => project.title == activePage);
 
 
 //forms
+const todopopup = document.querySelector("#todopopup");
 const todoform = document.querySelector("#todoform");
 todoform.addEventListener("submit", (event) => {
     activePage = pageChanger();
@@ -40,7 +42,7 @@ todoform.addEventListener("submit", (event) => {
     let todoDate = todoform.elements['duedate'];
     let todoPriority = todoform.elements['priority'];
     let todoCompleted = todoform.elements['completed'];
-    
+
     let todoToAdd = todoUI().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value,
         todoPriority.value, "false");
@@ -53,9 +55,10 @@ todoform.addEventListener("submit", (event) => {
         if (todoToAdd.date == currentDate && activePage != "dueToday") {
             todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueToday"));
         }
-        if (thisWeek(todoToAdd.date) == true && activePage != "dueToday") {
+        if (thisWeek(todoToAdd.date) == true && activePage != "dueThisWeek") {
             todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
         }
+        todoPopup.style.display ='none';
     } else {
         alert("Can't add duplicate todo");
     }

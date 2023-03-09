@@ -11,18 +11,13 @@ export const todoUI= () => {
 
 
     function addTodo(todo, project) {
-        console.log("running todo");
         project.todoList.push(todo);
         return project;
     };
 
     function checkDuplicate(todo, project){
         let a = "nochange"
-        let b = ""
-        let c = "a"
-        console.log(todo.title);
-        console.log()
-        
+        let b = "" 
         if (project.todoList.find(project => project.title == todo.title) === undefined){
             a = "nodupe"
         } else {
@@ -35,8 +30,6 @@ export const todoUI= () => {
             a = "no dupe"
             return true;
         }
-        
-        console.log(a);
     }
         
     
