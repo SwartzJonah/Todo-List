@@ -12,8 +12,13 @@ __webpack_require__.r(__webpack_exports__);
 const todoUI= () => {
 
     const todoFactory = (title, dueDate, description, priority, checkbox) => {
-        const sayTitle = () => console.log("I am a todo");
-        return {title, dueDate, priority, description, checkbox, sayTitle };
+        let date = dueDate;
+        let month = date.slice(5,7);
+        let day = date.slice(8,10);
+        let year = date.slice(0,4);
+        date = `${month}-${day}-${year}`;
+        console.log(date);
+        return {title, date, priority, description, checkbox};
     };
 
 
@@ -23,6 +28,7 @@ const todoUI= () => {
     };
 
 return{ todoFactory, addTodo };
+
 };
 
 
@@ -111,21 +117,8 @@ __webpack_require__.r(__webpack_exports__);
 let activePage = "all";
 let activeProject;
 let projectArray;
-
-function pageChanger(newPage, array){
-    if(array != undefined){
-    projectArray = array;
-    }
-    console.log(projectArray);
-    activePage = newPage;
-    contentChanger(newPage, projectArray);
-    return activePage;
-}
-
-function contentChanger(page,array){
-    activeProject = array.find(project => project.title == page);
-    console.log(activeProject);
-}
+const displayDiv = document.querySelector("#display");
+const actualList = document.querySelector(".actualList");
 
 function initialPageLoad() {
 
@@ -133,41 +126,40 @@ function initialPageLoad() {
     const headerDiv = document.querySelector("#header");
 
     const sidebarDiv = document.querySelector("#sidebar");
-        const sidebarList = document.createElement("ul");
-            sidebarList.classList.add("sidebarlist");
-            const allTodos = document.createElement("li");
-            allTodos.addEventListener("click", (event) => {
-                pageChanger("all");
-            });
-            allTodos.textContent = "All Todos!";
-            const dueToday = document.createElement("li");
-            dueToday.addEventListener("click", (event) => {
-                pageChanger("dueToday")
-            });
-            dueToday.textContent = "Due Today!";
-            const dueWeek = document.createElement("li");
-            dueWeek.addEventListener("click", (event) => {
-                pageChanger("dueNextWeek");
-            });
-            dueWeek.textContent = "Due This Week!";
-            const projectsList = document.createElement("li");
-            projectsList.textContent = "Projects";
-            const actualList =  document.createElement("ul");
-            actualList.classList.add("actualList");
-            sidebarList.appendChild(allTodos);
-            sidebarList.appendChild(dueToday);
-            sidebarList.appendChild(dueWeek);
-            sidebarList.appendChild(projectsList);
-            sidebarList.appendChild(actualList);
+    const sidebarList = document.createElement("ul");
+    sidebarList.classList.add("sidebarlist");
+    const allTodos = document.createElement("li");
+    allTodos.addEventListener("click", (event) => {
+        pageChanger("all");
+    });
+    allTodos.textContent = "All Todos!";
+    const dueToday = document.createElement("li");
+    dueToday.addEventListener("click", (event) => {
+        pageChanger("dueToday")
+    });
+    dueToday.textContent = "Due Today!";
+    const dueWeek = document.createElement("li");
+    dueWeek.addEventListener("click", (event) => {
+        pageChanger("dueNextWeek");
+    });
+    dueWeek.textContent = "Due This Week!";
+    const projectsList = document.createElement("li");
+    projectsList.textContent = "Projects";
+    const actualList = document.createElement("ul");
+    actualList.classList.add("actualList");
+    sidebarList.appendChild(allTodos);
+    sidebarList.appendChild(dueToday);
+    sidebarList.appendChild(dueWeek);
+    sidebarList.appendChild(projectsList);
+    sidebarList.appendChild(actualList);
     sidebarDiv.appendChild(sidebarList);
     //things do today
     //things due this week
     //Projects with list of projects inside
     //button to add projects
 
-   
 
-    const displayDiv = document.querySelector("#display");
+
     //displays the todo's for whatever is selected on sidebar
     //button to add todo's
 
@@ -176,6 +168,66 @@ function initialPageLoad() {
     const contentDiv = document.querySelector("#content");
 
 }
+
+function pageChanger(newPage, array) {
+    if (newPage === undefined) {
+        console.log("sent in from pageload");
+        contentChanger(activePage, projectArray);
+        return activePage;
+    }
+    if (array != undefined) {
+        console.log(newPage);
+        console.log(array);
+        console.log("sent in to add to array");
+        projectArray = array;
+        activePage = newPage;
+        contentChanger(newPage, projectArray);
+        return activePage;
+    } else {
+        console.log("sent into refresh page");
+        activePage = newPage;
+        contentChanger(newPage, projectArray);
+        return activePage;
+    }
+
+}
+
+//writes curernt project of todolists to dom
+function contentChanger(page, array) {
+    activeProject = array.find(project => project.title == page);
+    console.log(activeProject.todoList);
+    displayDiv.replaceChildren();
+    if (activeProject.todoList.length > 0) {
+        for (let i = 0; i < activeProject.todoList.length; i++) {
+            let todo = activeProject.todoList[i];
+            let todoDiv = document.createElement("div");
+            todoDiv.classList.add("todoStyle");
+
+            let todoTitle = document.createElement("p");
+            let todoDescription = document.createElement("p");
+            let todoDate = document.createElement("p");
+            if (todo.priority == "light"){
+                todoDiv.style.backgroundColor = "lightgreen";
+            }
+            if (todo.priority == "normal"){
+                todoDiv.style.backgroundColor = "#bbd652";
+            }
+            if (todo.priority == "urgent"){
+                todoDiv.style.backgroundColor = "lightcoral";
+            }
+            let deleteTodoBtn = document.createElement("button");
+            todoTitle.textContent = todo.title;
+            todoDescription.textContent = todo.description;
+            todoDate.textContent = todo.date;
+            todoDiv.appendChild(todoTitle);
+            todoDiv.appendChild(todoDescription);
+            todoDiv.appendChild(todoDate);
+            displayDiv.appendChild(todoDiv);
+        };
+
+    };
+}
+
 
 /***/ })
 /******/ 	]);
@@ -263,6 +315,7 @@ let activeProject = projectsArray.find(project => project.title == activePage);
 //forms
 const todoform = document.querySelector("#todoform");
 todoform.addEventListener("submit", (event) => {
+    activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)();
     let todoTitle = todoform.elements['title'];
     let todoDescription = todoform.elements['description'];
     let todoDate = todoform.elements['duedate'];
@@ -270,12 +323,14 @@ todoform.addEventListener("submit", (event) => {
     let todoCompleted = todoform.elements['completed'];
     let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
-        todoPriority.value,todoCompleted.checked);
-    (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, activeProject);
-    console.log(todoToAdd);
-    console.log(activeProject);
+        todoPriority.value, "false");
+    console.log(activePage);
+    (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
+    //console.log(todoToAdd);
+    //console.log(activeProject);
     console.log(projectsArray);
     //todoform.reset();
+    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)(activePage, projectsArray);
     event.preventDefault();
 });
 

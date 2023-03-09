@@ -17,16 +17,13 @@
             <div class="inputOne">
                 <input type="text" id='title' name='title' placeholder="Task" required>
                 <input type="date" id='duedate' value="2023-03-01" min="2023-01-01" max ="2023-12-31" required>
-                <input type="text" id='description' placeholder="Description">
+                <input type="text" id='description' placeholder="Description" >
             </div>
             <div class="inputTwo">
                 <label>Priority:</label>
-                <label>Light</label><input type="radio" value="light" name="priority"/>
+                <label>Light</label><input type="radio" value="light" name="priority" required />
                 <label>Normal</label><input type="radio" value="normal" name="priority"/>
                 <label>Urgent</label><input type="radio" value="urgent" name="priority"/>
-            </div>
-            <div class="inputThree">
-                <label>Completed: &nbsp</label><input type="checkbox" id='completed' value=' '>
             </div>
             <button type="submit" form="todoform" id="todosubmitBtn">Add Todo</button>
         </form>
@@ -47,4 +44,7 @@
         <div id="display"></div>
     </div>
 </body>
+<footer>
+    <p>Built By <a href="https://github.com/SwartzJonah">Jonah Swartz</a></p>
+</footer>
 </html>
