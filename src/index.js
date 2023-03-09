@@ -20,6 +20,7 @@ let activeProject = projectsArray.find(project => project.title == activePage);
 //forms
 const todoform = document.querySelector("#todoform");
 todoform.addEventListener("submit", (event) => {
+    activePage = pageChanger();
     let todoTitle = todoform.elements['title'];
     let todoDescription = todoform.elements['description'];
     let todoDate = todoform.elements['duedate'];
@@ -27,12 +28,14 @@ todoform.addEventListener("submit", (event) => {
     let todoCompleted = todoform.elements['completed'];
     let todoToAdd = todoUI().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
-        todoPriority.value,todoCompleted.checked);
-    todoUI().addTodo(todoToAdd, activeProject);
-    console.log(todoToAdd);
-    console.log(activeProject);
+        todoPriority.value, "false");
+    console.log(activePage);
+    todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
+    //console.log(todoToAdd);
+    //console.log(activeProject);
     console.log(projectsArray);
     //todoform.reset();
+    pageChanger(activePage, projectsArray);
     event.preventDefault();
 });
 
