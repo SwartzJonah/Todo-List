@@ -15,6 +15,7 @@ body{
     display: flex;
     background-color: lightgray;
     min-height: 90vh;
+    
 }
 
 #sidebar{
@@ -28,6 +29,7 @@ body{
 }
 
 #todopopup{
+    display: none;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -72,6 +74,17 @@ body{
     font-family: 'Times New Roman', Times, serif
 }
 
+.addTodoButton{
+    position: fixed;
+    height:50px;
+    width:120px;
+    margin-top: 82vh;
+    margin-left: 80vw;
+    background: red;
+    border: 2px solid yellow;
+    border-radius: 12px;
+}
+
 ul{
     justify-content: space-around;
     list-style: none;
@@ -92,7 +105,7 @@ button:active{
 
 footer{
     font-weight: bold;
-    position: absolute;
+    position: fixed;
     
     bottom: 0;
     padding-top: 10px;
