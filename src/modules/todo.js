@@ -6,12 +6,12 @@ export const todoUI= () => {
         let day = date.slice(8,10);
         let year = date.slice(0,4);
         date = `${month}-${day}-${year}`;
-        console.log(date);
         return {title, date, priority, description, checkbox};
     };
 
 
     function addTodo(todo, project) {
+        console.log(project.todoList.length);
         project.todoList.push(todo);
         return project;
     };

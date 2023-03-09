@@ -2,6 +2,20 @@
 import { todoUI } from "./modules/todo";
 import { projectUI} from "./modules/project";
 import { initialPageLoad, pageChanger } from "./modules/initial-page-load"
+const todayDate = new Date();
+let day = todayDate.getDate();
+if(day<=9){
+    day = "0" + day;
+    
+}
+let month = todayDate.getMonth() + 1;
+if(month<=9){
+    month = "0" + month;
+}
+
+let year = todayDate.getFullYear();
+let currentDate = `${month}-${day}-${year}`;
+
 //starter states
 initialPageLoad();
 const projectsArray = projectUI().setUpArray();
@@ -29,8 +43,16 @@ todoform.addEventListener("submit", (event) => {
     let todoToAdd = todoUI().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
         todoPriority.value, "false");
-    console.log(activePage);
     todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
+    if (activePage != "all"){
+        todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
+    }
+    if(todoToAdd.date == currentDate  && activePage != "dueToday"){
+        todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueToday"));
+    }
+    if(thisWeek(todoToAdd.date) == true && activePage != "dueToday"){
+        todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
+    }
     //console.log(todoToAdd);
     //console.log(activeProject);
     console.log(projectsArray);
@@ -55,5 +77,12 @@ projectform.addEventListener("submit", (event) => {
 
 });
 
-
+function thisWeek(date){
+    let dayOf = date.slice(3,5)
+    let todaytest = todayDate.getDate();
+    let endofweek = todaytest+7;
+    if(dayOf >= todaytest && dayOf <= endofweek){
+        return true;
+    }
+}
 

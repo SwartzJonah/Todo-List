@@ -17,12 +17,12 @@ const todoUI= () => {
         let day = date.slice(8,10);
         let year = date.slice(0,4);
         date = `${month}-${day}-${year}`;
-        console.log(date);
         return {title, date, priority, description, checkbox};
     };
 
 
     function addTodo(todo, project) {
+        console.log(project.todoList.length);
         project.todoList.push(todo);
         return project;
     };
@@ -64,7 +64,7 @@ const projectUI = () => {
 
         const dueToday = projectFactory("dueToday", [], "things due today", currentDate);
 
-        const dueWeek = projectFactory("dueNextWeek", [], "things due next week", nextWeekDate);
+        const dueWeek = projectFactory("dueThisWeek", [], "things due next week", nextWeekDate);
 
         const defaultProject = projectFactory("Default", [], "Default Project");
 
@@ -86,7 +86,7 @@ const projectUI = () => {
     // projectsArray.push(defaultProject);
 
     function addProject(project, array) {
-        if (project.title != "all" && project.title != "dueToday" && project.title != "dueNextWeek"){
+        if (project.title != "all" && project.title != "dueToday" && project.title != "dueThisWeek"){
             const projectTitle = project.title;
             const divAdd = document.createElement("li");
             divAdd.addEventListener("click", (event) => {
@@ -121,6 +121,7 @@ const displayDiv = document.querySelector("#display");
 const actualList = document.querySelector(".actualList");
 
 function initialPageLoad() {
+    getDate()
 
     //Make Header
     const headerDiv = document.querySelector("#header");
@@ -140,7 +141,7 @@ function initialPageLoad() {
     dueToday.textContent = "Due Today!";
     const dueWeek = document.createElement("li");
     dueWeek.addEventListener("click", (event) => {
-        pageChanger("dueNextWeek");
+        pageChanger("dueThisWeek");
     });
     dueWeek.textContent = "Due This Week!";
     const projectsList = document.createElement("li");
@@ -176,8 +177,7 @@ function pageChanger(newPage, array) {
         return activePage;
     }
     if (array != undefined) {
-        console.log(newPage);
-        console.log(array);
+
         console.log("sent in to add to array");
         projectArray = array;
         activePage = newPage;
@@ -215,18 +215,44 @@ function contentChanger(page, array) {
             if (todo.priority == "urgent"){
                 todoDiv.style.backgroundColor = "lightcoral";
             }
+            //delete button stuff
+            let buttonsCtn = document.createElement("div");
+            buttonsCtn.classList.add("buttonContainer");
             let deleteTodoBtn = document.createElement("button");
+            deleteTodoBtn.classList.add("deleteTodoButton");
+            deleteTodoBtn.textContent = "Delete";
+            deleteTodoBtn.addEventListener("click", (event) => {
+                deleteTodo(todo,activeProject,array);
+            });
+            buttonsCtn.appendChild(deleteTodoBtn);
+
+
             todoTitle.textContent = todo.title;
             todoDescription.textContent = todo.description;
             todoDate.textContent = todo.date;
             todoDiv.appendChild(todoTitle);
             todoDiv.appendChild(todoDescription);
             todoDiv.appendChild(todoDate);
+            todoDiv.appendChild(buttonsCtn);
             displayDiv.appendChild(todoDiv);
         };
 
     };
 }
+
+function deleteTodo(todo, array, bigarray){
+    let deletedTodo = array.todoList.find(project => project.title == todo.title);
+    let index = array.todoList.indexOf(deletedTodo);
+    console.log(array);
+    array.todoList.splice(index, 1);
+    pageChanger();
+    console.log(array);
+}
+
+function getDate(){
+    var today = new Date();
+    document.getElementById("duedate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+    }
 
 
 /***/ })
@@ -297,6 +323,20 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const todayDate = new Date();
+let day = todayDate.getDate();
+if(day<=9){
+    day = "0" + day;
+    
+}
+let month = todayDate.getMonth() + 1;
+if(month<=9){
+    month = "0" + month;
+}
+
+let year = todayDate.getFullYear();
+let currentDate = `${month}-${day}-${year}`;
+
 //starter states
 (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
 const projectsArray = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().setUpArray();
@@ -324,8 +364,16 @@ todoform.addEventListener("submit", (event) => {
     let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value, 
         todoPriority.value, "false");
-    console.log(activePage);
     (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
+    if (activePage != "all"){
+        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
+    }
+    if(todoToAdd.date == currentDate  && activePage != "dueToday"){
+        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueToday"));
+    }
+    if(thisWeek(todoToAdd.date) == true && activePage != "dueToday"){
+        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
+    }
     //console.log(todoToAdd);
     //console.log(activeProject);
     console.log(projectsArray);
@@ -350,7 +398,14 @@ projectform.addEventListener("submit", (event) => {
 
 });
 
-
+function thisWeek(date){
+    let dayOf = date.slice(3,5)
+    let todaytest = todayDate.getDate();
+    let endofweek = todaytest+7;
+    if(dayOf >= todaytest && dayOf <= endofweek){
+        return true;
+    }
+}
 
 
 })();

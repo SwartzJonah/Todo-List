@@ -20,7 +20,7 @@ export const projectUI = () => {
 
         const dueToday = projectFactory("dueToday", [], "things due today", currentDate);
 
-        const dueWeek = projectFactory("dueNextWeek", [], "things due next week", nextWeekDate);
+        const dueWeek = projectFactory("dueThisWeek", [], "things due next week", nextWeekDate);
 
         const defaultProject = projectFactory("Default", [], "Default Project");
 
@@ -42,7 +42,7 @@ export const projectUI = () => {
     // projectsArray.push(defaultProject);
 
     function addProject(project, array) {
-        if (project.title != "all" && project.title != "dueToday" && project.title != "dueNextWeek"){
+        if (project.title != "all" && project.title != "dueToday" && project.title != "dueThisWeek"){
             const projectTitle = project.title;
             const divAdd = document.createElement("li");
             divAdd.addEventListener("click", (event) => {
