@@ -22,14 +22,40 @@ const todoUI= () => {
 
 
     function addTodo(todo, project) {
-        console.log(project.todoList.length);
+        console.log("running todo");
         project.todoList.push(todo);
         return project;
     };
 
-return{ todoFactory, addTodo };
+    function checkDuplicate(todo, project){
+        let a = "nochange"
+        let b = ""
+        let c = "a"
+        console.log(todo.title);
+        console.log()
+        
+        if (project.todoList.find(project => project.title == todo.title) === undefined){
+            a = "nodupe"
+        } else {
+            b = project.todoList.find(project => project.title == todo.title);
+        }
+        if (todo.title === b.title){
+            a = "dupe"
+            return false;
+        } else {
+            a = "no dupe"
+            return true;
+        }
+        
+        console.log(a);
+    }
+        
+    
 
-};
+return{ todoFactory, addTodo, checkDuplicate };
+}
+
+
 
 
 
@@ -325,12 +351,12 @@ __webpack_require__.r(__webpack_exports__);
 
 const todayDate = new Date();
 let day = todayDate.getDate();
-if(day<=9){
+if (day <= 9) {
     day = "0" + day;
-    
+
 }
 let month = todayDate.getMonth() + 1;
-if(month<=9){
+if (month <= 9) {
     month = "0" + month;
 }
 
@@ -361,23 +387,26 @@ todoform.addEventListener("submit", (event) => {
     let todoDate = todoform.elements['duedate'];
     let todoPriority = todoform.elements['priority'];
     let todoCompleted = todoform.elements['completed'];
+    
     let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
-        todoTitle.value, todoDate.value, todoDescription.value, 
+        todoTitle.value, todoDate.value, todoDescription.value,
         todoPriority.value, "false");
-    (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
-    if (activePage != "all"){
-        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
+
+    if((0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().checkDuplicate(todoToAdd, projectsArray.find(project => project.title == "all"))) {
+        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
+        if (activePage != "all") {
+            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
+        }
+        if (todoToAdd.date == currentDate && activePage != "dueToday") {
+            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueToday"));
+        }
+        if (thisWeek(todoToAdd.date) == true && activePage != "dueToday") {
+            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
+        }
+    } else {
+        alert("Can't add duplicate todo");
     }
-    if(todoToAdd.date == currentDate  && activePage != "dueToday"){
-        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueToday"));
-    }
-    if(thisWeek(todoToAdd.date) == true && activePage != "dueToday"){
-        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
-    }
-    //console.log(todoToAdd);
-    //console.log(activeProject);
     console.log(projectsArray);
-    //todoform.reset();
     (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)(activePage, projectsArray);
     event.preventDefault();
 });
@@ -398,11 +427,11 @@ projectform.addEventListener("submit", (event) => {
 
 });
 
-function thisWeek(date){
-    let dayOf = date.slice(3,5)
+function thisWeek(date) {
+    let dayOf = date.slice(3, 5)
     let todaytest = todayDate.getDate();
-    let endofweek = todaytest+7;
-    if(dayOf >= todaytest && dayOf <= endofweek){
+    let endofweek = todaytest + 7;
+    if (dayOf >= todaytest && dayOf <= endofweek) {
         return true;
     }
 }
