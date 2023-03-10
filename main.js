@@ -21,7 +21,6 @@ const todoUI= () => {
         let tempLetter = tempTitle.charAt(0).toUpperCase();
         let remains = tempTitle.slice(1);
         title = tempLetter + remains;
-        console.log(title);
         return {title, date, priority, description, checkbox};
     };
 
@@ -85,7 +84,6 @@ const projectUI = () => {
             let tempLetter = tempTitle.charAt(0).toUpperCase();
             let remains = tempTitle.slice(1);
             title = tempLetter + remains;
-            console.log(title);
     }
 
         return { title, todoList, description,};
@@ -169,8 +167,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad),
 /* harmony export */   "pageChanger": () => (/* binding */ pageChanger)
 /* harmony export */ });
-/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
+/* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
+
 
 
 let activePage = "all";
@@ -269,16 +269,19 @@ function initialPageLoad() {
 function pageChanger(newPage, array) {
     if (newPage === undefined) {
         contentChanger(activePage, projectArray);
+        (0,_storage__WEBPACK_IMPORTED_MODULE_0__.setStorage)(projectArray);
         return activePage;
     }
     if (array != undefined) {
         projectArray = array;
         activePage = newPage;
         contentChanger(newPage, projectArray);
+        (0,_storage__WEBPACK_IMPORTED_MODULE_0__.setStorage)(projectArray);
         return activePage;
     } else {
         activePage = newPage;
         contentChanger(newPage, projectArray);
+        (0,_storage__WEBPACK_IMPORTED_MODULE_0__.setStorage)(projectArray);
         return activePage;
     }
 
@@ -287,7 +290,6 @@ function pageChanger(newPage, array) {
 //writes curernt project of todolists to dom
 function contentChanger(page, array) {
     activeProject = array.find(project => project.title == page);
-    console.log(activeProject);
     displayDiv.replaceChildren();
     let projectTitleDiv = document.createElement("div");
     if(activeProject.title == "all" || activeProject.title == "dueToday" ||
@@ -352,7 +354,7 @@ function contentChanger(page, array) {
             todoDiv.appendChild(buttonsCtn);
             displayDiv.appendChild(todoDiv);
         };
-
+        
     };
 }
 
@@ -432,6 +434,51 @@ function getDate() {
 }
 
 
+/***/ }),
+/* 4 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getStorage": () => (/* binding */ getStorage),
+/* harmony export */   "setStorage": () => (/* binding */ setStorage)
+/* harmony export */ });
+
+
+function getStorage() {
+    //let storageArray = localStorage.getItem("data");
+    // console.log(storageArray);
+}
+
+function setStorage(projectArray) {
+    let storageArray = projectArray;
+    console.log(storageArray);
+    for (let i = 0; i < storageArray.length; i++) {
+        let project = storageArray[i];
+        for (let j = 0; j < project.todoList.length; j++) {
+            let todo = project.todoList[j];
+            let todoTitle = todo.title;
+            let todoDate = todo.date;
+            let todoDescription = todo.description;
+            let todoPriority = todo.priority;
+            localStorage.setItem("project" + i + "todolist" + j + "title", todoTitle);
+            localStorage.setItem("project" + i + "todolist" + j + "date", todoDate);
+            localStorage.setItem("project" + i + "todolist" + j + "description", todoDescription);
+            localStorage.setItem("project" + i + "todolist" + j + "priority", todoPriority);
+            
+        }
+    }
+    // for (let i = 0; i < storageArray.length; i++) { 
+    //     let project = storageArray[i];  
+    //     for (let j = 0; j < project.todoList.length; j++) {
+    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "title"));
+    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "date"));
+    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "description"));
+    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "priority"));
+    //     }
+    // }
+}
+
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -493,10 +540,11 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _modules_project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-//import { compareAsc, format } from 'date-fns';
+/* harmony import */ var _modules_storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+/* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
+/* harmony import */ var _modules_project__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+/* harmony import */ var _modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
+
 
 
 
@@ -515,12 +563,13 @@ let year = todayDate.getFullYear();
 let currentDate = `${month}-${day}-${year}`;
 
 //starter states
-(0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.initialPageLoad)();
+(0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.initialPageLoad)();
 //sets up initial array
-const projectsArray = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().setUpArray();
+(0,_modules_storage__WEBPACK_IMPORTED_MODULE_0__.getStorage)();
+const projectsArray = (0,_modules_project__WEBPACK_IMPORTED_MODULE_2__.projectUI)().setUpArray();
 
 //This will tell file what project is open
-let activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)("all", projectsArray);
+let activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.pageChanger)("all", projectsArray);
 
 let activeProject = projectsArray.find(project => project.title == activePage);
 //console.log(activeProject);
@@ -537,32 +586,33 @@ const editform = document.querySelector("#editform");
 editform.addEventListener("submit", (event) => {
     event.preventDefault();
     console.log(activePage);
-    activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)();
+    activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.pageChanger)();
     let editTitle = editform.elements['title'];
     let editDescription = editform.elements['description'];
     let editDate = editform.elements['duedate1'];
     let editPriority = editform.elements['priority'];
-    let todoToEdit = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
+    let todoToEdit = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().todoFactory(
         editTitle.value, editDate.value, editDescription.value,
         editPriority.value, "false");
-    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == activePage));
+    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.editTodo)(todoToEdit, projectsArray.find(project => project.title == activePage));
     if (activePage != "all") {
-        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "all"));
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "all"));
     }
     if (todoToEdit.date != currentDate){
-        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueToday"), "remove");
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueToday"), "remove");
     } else if (todoToEdit.date == currentDate && activePage != "dueToday") {
-        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueToday"));
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueToday"));
     }
     if (thisWeek(todoToEdit.date) != true){
-        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"), "remove");
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"), "remove");
     }   else if (thisWeek(todoToEdit.date) == true && activePage != "dueThisWeek") {
-        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"));
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"));
     }
     editPopup.style.display = 'none';
     editform.reset();
-    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.getDate)();
-    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)(activePage, projectsArray);
+    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.getDate)();
+    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.pageChanger)(activePage, projectsArray);
+    (0,_modules_storage__WEBPACK_IMPORTED_MODULE_0__.setStorage)(projectsArray);
 });
 
 //todoform
@@ -571,36 +621,37 @@ const projectPopup = document.querySelector("#projectpopup");
 const todoform = document.querySelector("#todoform");
 todoform.addEventListener("submit", (event) => {
     event.preventDefault();
-    activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)();
+    activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.pageChanger)();
     let todoTitle = todoform.elements['title'];
     let todoDescription = todoform.elements['description'];
     let todoDate = todoform.elements['duedate'];
     let todoPriority = todoform.elements['priority'];
 
 
-    let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
+    let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value,
         todoPriority.value, "false");
 
-    if ((0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().checkDuplicate(todoToAdd, projectsArray.find(project => project.title == "all"))) {
-        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
+    if ((0,_modules_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().checkDuplicate(todoToAdd, projectsArray.find(project => project.title == "all"))) {
+        (0,_modules_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
         if (activePage != "all") {
-            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
+            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
         }
         if (todoToAdd.date == currentDate && activePage != "dueToday") {
-            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueToday"));
+            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueToday"));
         }
         if (thisWeek(todoToAdd.date) == true && activePage != "dueThisWeek") {
-            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
+            (0,_modules_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
         }
         todoPopup.style.display = 'none';
         todoform.reset();
-        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.getDate)();
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.getDate)();
     } else {
         alert("Can't add duplicate todo");
     }
 
-    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)(activePage, projectsArray);
+    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.pageChanger)(activePage, projectsArray);
+    (0,_modules_storage__WEBPACK_IMPORTED_MODULE_0__.setStorage)(projectsArray);
 });
 
 //project form
@@ -609,12 +660,12 @@ projectform.addEventListener("submit", (event) => {
     event.preventDefault();
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
-    let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory(
+    let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_2__.projectUI)().projectFactory(
         projectTitle.value, [], projectDescription.value);;
-    (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().addProject(projectToAdd, projectsArray);
+    (0,_modules_project__WEBPACK_IMPORTED_MODULE_2__.projectUI)().addProject(projectToAdd, projectsArray);
     projectPopup.style.display = 'none';
     projectform.reset();
-    
+    (0,_modules_storage__WEBPACK_IMPORTED_MODULE_0__.setStorage)(projectsArray);
     //adds to dom
 
 });
