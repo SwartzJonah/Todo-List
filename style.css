@@ -1,154 +1,253 @@
-body{
+body {
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     margin: 0;
+    font-family: 'Times New Roman', Times, serif;
 }
 
-#header{
-    text-align: center;
-    background-color: blueviolet;
-    min-height: 10vh;
+#header {
+    
+    background-color: #d1fae5;
+    min-height: 9.5vh;
     min-width: 100vw;
-    
+    border-bottom: .5vh solid black;
+}
+h1{
+    padding-left: 40px;
 }
 
-#content{
+#content {
     display: flex;
-    background-color: lightgray;
+    background-color: #8195a9;
     min-height: 90vh;
-    
+
 }
 
-#sidebar{
-    background-color: pink;
-    min-width: 20vw;
+#sidebar {
+    background-color: #d1fae5;
+    min-width: 19.6vw;
+    border-right: .4vw solid black;
 }
 
-#display{
-    background-color: lightslategray;
+#display {
+    background-color: #8195a9;
     min-width: 80vw;
 }
 
-#todopopup{
+#todopopup {
     display: none;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
-    background-color: #F699AB;
+    background-color: #d1fae5;
     padding: 20px;
-    border: 4px solid gray;
+    border: 4px solid black;
+    border-radius: 12px;
 }
 
-#editpopup{
+.inputTwo{
+    margin-top:10px;
+    text-align: center;
+}
+#todosubmitBtn {
+    font-weight: bold;
+    width: 100px;
+    border-radius: 12px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-left: 190px;
+}
+
+#editpopup {
     display: none;
     left: 50%;
     top: 70%;
     transform: translate(-50%, -50%);
     position: absolute;
-    background-color: #F699AB;
+    background-color: #d1fae5;
     padding: 20px;
-    border: 4px solid gray;
+    border: 4px solid black;
+    border-radius: 12px;
 }
 
-#projectpopup{
+#editsubmitBtn {
+    font-weight: bold;
+    width: 100px;
+    border-radius: 12px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-left: 190px;
+}
+
+#projectpopup {
     display: none;
     left: 50%;
     top: 30%;
     transform: translate(-50%, -50%);
     position: absolute;
-    background-color: #F699AB;
+    background-color: #d1fae5;
     padding: 20px;
-    border: 4px solid gray;
+    border: 4px solid black;
+    border-radius: 12px;
 }
 
-.todoStyle{
+#projectsubmitBtn {
+    font-weight: bold;
+    width: 100px;
+    border-radius: 12px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-left: 130px;
+}
+
+.todoStyle {
+    border: 2px solid black;
+    border-radius: 12px;
     margin: 20px;
     margin-left: 5vw;
+    margin-right: 5vw;
     display: grid;
-    grid-template-columns: 1fr 3fr 1fr .5fr;
+    grid-template-columns: 1fr 4fr 1fr 1fr;
     text-align: center;
     justify-content: center;
+    padding:10px;
+    
 }
-.buttonContainer{
+
+.todoTitle{
+    border-right: 2px dashed black;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: bold;
+    
 }
-.deleteTodoButton{
+.todoDescription{
+    margin-left: 5px;
+    border-right: 1px dashed black;
+    display: flex;
+    align-items: center;
+    
+}
+.todoDate{
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.editTodoButton {
+    background: #bae6fd;
     text-align: center;
     height: 30px;
     width: 60px;
-    border: 2px solid white;
+    border: 2px solid black;
     border-radius: 12px;
-    
+    font-size: 14px;
+    margin-right: 3px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.deleteTodoButton {
+    background: #fda4af;
+    text-align: center;
+    height: 30px;
+    width: 60px;
+    border: 2px solid black;
+    border-radius: 12px;
     font-size: 14px;
     font-weight: bold;
     font-family: 'Times New Roman', Times, serif
 }
 
-.addTodoButton{
+
+
+.addTodoButton {
+    font-weight: bold;
     position: fixed;
-    height:50px;
-    width:120px;
+    height: 50px;
+    width: 120px;
     margin-top: 82vh;
     margin-left: 85vw;
-    background: red;
-    border: 2px solid yellow;
+    background: #d1fae5;
+    border: 2px solid black;
     border-radius: 12px;
 }
 
-.deleteProjectButton{
+.deleteProjectButton {
+    font-weight: bold;
     display: none;
     position: fixed;
-    height:50px;
-    width:120px;
+    height: 50px;
+    width: 120px;
     margin-top: 82vh;
     margin-left: 25vw;
-    background: red;
-    border: 2px solid yellow;
+    background: #d1fae5;
+    border: 2px solid black;
     border-radius: 12px;
 }
 
-.addProjectButton{
+.addProjectButton {
+    font-weight: bold;
     position: fixed;
-    height:50px;
-    width:120px;
+    height: 50px;
+    width: 120px;
     margin-top: 82vh;
     margin-left: 40px;
-    background: red;
-    border: 2px solid yellow;
+    background: #8195a9;
+    border: 2px solid black;
     border-radius: 12px;
 }
 
-ul{
+.projectHeader {
+    border-bottom: 4px dashed #d1fae5;
+    margin-top: 5px;
+    font-size: 28px;
+    padding-bottom: 5px;
+    font-weight: bolder;
+    text-align: center;
+    color: #d1fae5;
+}
+
+ul {
     justify-content: space-around;
     list-style: none;
     font-size: 20px;
     font-weight: bold;
 }
 
-li{
+li {
     display: flex;
     flex-direction: column;
     cursor: pointer;
     list-style: none;
+    margin-bottom: 10px;
 }
 
-button:active{
+button:active {
     transform: scale(.9);
 }
 
-footer{
+footer {
     font-weight: bold;
     position: fixed;
-    
+
     bottom: 0;
     padding-top: 10px;
     color: red;
     padding-bottom: 0px;
     margin-left: 45vw;
-    
+
     font-size: 15px;
     justify-content: center;
 }
