@@ -1,4 +1,4 @@
-//import { compareAsc, format } from 'date-fns';
+import { getStorage, setStorage } from "./modules/storage"
 import { todoUI } from "./modules/todo";
 import { projectUI } from "./modules/project";
 import { initialPageLoad, pageChanger, editTodo, getDate } from "./modules/initial-page-load"
@@ -19,6 +19,7 @@ let currentDate = `${month}-${day}-${year}`;
 //starter states
 initialPageLoad();
 //sets up initial array
+getStorage();
 const projectsArray = projectUI().setUpArray();
 
 //This will tell file what project is open
@@ -65,6 +66,7 @@ editform.addEventListener("submit", (event) => {
     editform.reset();
     getDate();
     pageChanger(activePage, projectsArray);
+    setStorage(projectsArray);
 });
 
 //todoform
@@ -103,6 +105,7 @@ todoform.addEventListener("submit", (event) => {
     }
 
     pageChanger(activePage, projectsArray);
+    setStorage(projectsArray);
 });
 
 //project form
@@ -116,7 +119,7 @@ projectform.addEventListener("submit", (event) => {
     projectUI().addProject(projectToAdd, projectsArray);
     projectPopup.style.display = 'none';
     projectform.reset();
-    
+    setStorage(projectsArray);
     //adds to dom
 
 });

@@ -1,3 +1,4 @@
+import { getStorage, setStorage } from "./storage"
 import { projectUI } from "./project";
 import { todoUI } from "./todo";
 let activePage = "all";
@@ -96,16 +97,19 @@ export function initialPageLoad() {
 export function pageChanger(newPage, array) {
     if (newPage === undefined) {
         contentChanger(activePage, projectArray);
+        setStorage(projectArray);
         return activePage;
     }
     if (array != undefined) {
         projectArray = array;
         activePage = newPage;
         contentChanger(newPage, projectArray);
+        setStorage(projectArray);
         return activePage;
     } else {
         activePage = newPage;
         contentChanger(newPage, projectArray);
+        setStorage(projectArray);
         return activePage;
     }
 
@@ -114,7 +118,6 @@ export function pageChanger(newPage, array) {
 //writes curernt project of todolists to dom
 function contentChanger(page, array) {
     activeProject = array.find(project => project.title == page);
-    console.log(activeProject);
     displayDiv.replaceChildren();
     let projectTitleDiv = document.createElement("div");
     if(activeProject.title == "all" || activeProject.title == "dueToday" ||
@@ -179,7 +182,7 @@ function contentChanger(page, array) {
             todoDiv.appendChild(buttonsCtn);
             displayDiv.appendChild(todoDiv);
         };
-
+        
     };
 }
 

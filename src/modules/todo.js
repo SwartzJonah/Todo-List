@@ -10,7 +10,6 @@ export const todoUI= () => {
         let tempLetter = tempTitle.charAt(0).toUpperCase();
         let remains = tempTitle.slice(1);
         title = tempLetter + remains;
-        console.log(title);
         return {title, date, priority, description, checkbox};
     };
 
