@@ -11,17 +11,25 @@ let nextWeekDate = `${month}-${day+7}-${year}`;
 export const projectUI = () => {
 
     const projectFactory = (title, todoList, description,) => {
+        if(title != "all" && title != "dueToday" &&
+        title != "dueThisWeek"){
+            let tempTitle = title;
+            let tempLetter = tempTitle.charAt(0).toUpperCase();
+            let remains = tempTitle.slice(1);
+            title = tempLetter + remains;
+            console.log(title);
+    }
 
         return { title, todoList, description,};
     }
 
     function setUpArray() {
         
-        const allTodos = projectFactory("all", [], "All todos");
+        const allTodos = projectFactory("all", [], "All Todos");
 
-        const dueToday = projectFactory("dueToday", [], "things due today", currentDate);
+        const dueToday = projectFactory("dueToday", [], "Things Due Today", currentDate);
 
-        const dueWeek = projectFactory("dueThisWeek", [], "things due next week", nextWeekDate);
+        const dueWeek = projectFactory("dueThisWeek", [], "Things Due This Week", nextWeekDate);
 
         const defaultProject = projectFactory("Default", [], "Default Project");
 
@@ -54,7 +62,7 @@ export const projectUI = () => {
                 buttonAppear();
                 deleteProjectBtn();
             });
-            divAdd.textContent = projectTitle;
+            divAdd.textContent = "- "  + projectTitle;
             actualList.appendChild(divAdd);
         } 
             array.push(project);

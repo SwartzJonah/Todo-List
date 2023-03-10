@@ -23,6 +23,7 @@ export function initialPageLoad() {
     const allTodos = document.createElement("li");
     allTodos.addEventListener("click", (event) => {
         pageChanger("all");
+        deleteProjectBtn.style.display = "none";
         if (isButtonUp === false) {
             addTodoButton.style.display = "table";
             isButtonUp = true;
@@ -32,6 +33,7 @@ export function initialPageLoad() {
 
     const dueToday = document.createElement("li");
     dueToday.addEventListener("click", (event) => {
+        deleteProjectBtn.style.display = "none";
         pageChanger("dueToday")
         if (isButtonUp === true) {
             addTodoButton.style.display = "none";
@@ -43,6 +45,7 @@ export function initialPageLoad() {
 
     const dueWeek = document.createElement("li");
     dueWeek.addEventListener("click", (event) => {
+        deleteProjectBtn.style.display = "none";
         pageChanger("dueThisWeek");
         if (isButtonUp === true) {
             addTodoButton.style.display = "none";
@@ -111,22 +114,37 @@ export function pageChanger(newPage, array) {
 //writes curernt project of todolists to dom
 function contentChanger(page, array) {
     activeProject = array.find(project => project.title == page);
-    console.log(activeProject.todoList);
+    console.log(activeProject);
     displayDiv.replaceChildren();
+    let projectTitleDiv = document.createElement("div");
+    if(activeProject.title == "all" || activeProject.title == "dueToday" ||
+    activeProject.title == "dueThisWeek"){
+        projectTitleDiv.classList.add("projectHeader");
+        projectTitleDiv.textContent = activeProject.description;
+        displayDiv.appendChild(projectTitleDiv);
+    } else {
+        projectTitleDiv.classList.add("projectHeader");
+        projectTitleDiv.textContent = activeProject.title;
+        displayDiv.appendChild(projectTitleDiv);
+    }
+    //projectTitleDiv.textContent = 
     if (activeProject.todoList.length > 0) {
         for (let i = 0; i < activeProject.todoList.length; i++) {
             let todo = activeProject.todoList[i];
             let todoDiv = document.createElement("div");
             todoDiv.classList.add("todoStyle");
 
-            let todoTitle = document.createElement("p");
-            let todoDescription = document.createElement("p");
-            let todoDate = document.createElement("p");
+            let todoTitle = document.createElement("div");
+            todoTitle.classList.add("todoTitle");
+            let todoDescription = document.createElement("div");
+            todoDescription.classList.add("todoDescription");
+            let todoDate = document.createElement("div");
+            todoDate.classList.add("todoDate");
             if (todo.priority == "light") {
-                todoDiv.style.backgroundColor = "lightgreen";
+                todoDiv.style.backgroundColor = "#C2DDB6 ";
             }
             if (todo.priority == "normal") {
-                todoDiv.style.backgroundColor = "#bbd652";
+                todoDiv.style.backgroundColor = "#F8CB9C";
             }
             if (todo.priority == "urgent") {
                 todoDiv.style.backgroundColor = "lightcoral";
@@ -234,7 +252,7 @@ export function buttonAppear() {
     isButtonUp = true;
 }
 //gets the current date
-function getDate() {
+export function getDate() {
     var today = new Date();
     document.getElementById("duedate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
     document.getElementById("duedate1").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);

@@ -1,7 +1,7 @@
 //import { compareAsc, format } from 'date-fns';
 import { todoUI } from "./modules/todo";
 import { projectUI } from "./modules/project";
-import { initialPageLoad, pageChanger, editTodo } from "./modules/initial-page-load"
+import { initialPageLoad, pageChanger, editTodo, getDate } from "./modules/initial-page-load"
 const todayDate = new Date();
 let day = todayDate.getDate();
 if (day <= 9) {
@@ -62,6 +62,8 @@ editform.addEventListener("submit", (event) => {
         editTodo(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"));
     }
     editPopup.style.display = 'none';
+    editform.reset();
+    getDate();
     pageChanger(activePage, projectsArray);
 });
 
@@ -70,6 +72,7 @@ const todoPopup = document.querySelector("#todopopup");
 const projectPopup = document.querySelector("#projectpopup");
 const todoform = document.querySelector("#todoform");
 todoform.addEventListener("submit", (event) => {
+    event.preventDefault();
     activePage = pageChanger();
     let todoTitle = todoform.elements['title'];
     let todoDescription = todoform.elements['description'];
@@ -93,12 +96,13 @@ todoform.addEventListener("submit", (event) => {
             todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
         }
         todoPopup.style.display = 'none';
+        todoform.reset();
+        getDate();
     } else {
         alert("Can't add duplicate todo");
     }
-    console.log(projectsArray);
+
     pageChanger(activePage, projectsArray);
-    event.preventDefault();
 });
 
 //project form
@@ -111,14 +115,13 @@ projectform.addEventListener("submit", (event) => {
         projectTitle.value, [], projectDescription.value);;
     projectUI().addProject(projectToAdd, projectsArray);
     projectPopup.style.display = 'none';
-    //projectform.reset();
+    projectform.reset();
     
     //adds to dom
 
 });
 
 function thisWeek(date) {
-    console.log(date);
     let dayOf = date.slice(3, 5)
     let todaytest = todayDate.getDate();
     let endofweek = todaytest + 7;
@@ -127,3 +130,8 @@ function thisWeek(date) {
     }
 }
 
+
+//Future Additions 
+//Sub-projects withing Projects
+//Calendar view
+//planing modules
