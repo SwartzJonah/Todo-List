@@ -1,7 +1,7 @@
 //import { compareAsc, format } from 'date-fns';
 import { todoUI } from "./modules/todo";
 import { projectUI } from "./modules/project";
-import { initialPageLoad, pageChanger } from "./modules/initial-page-load"
+import { initialPageLoad, pageChanger, editTodo } from "./modules/initial-page-load"
 const todayDate = new Date();
 let day = todayDate.getDate();
 if (day <= 9) {
@@ -33,7 +33,41 @@ let activeProject = projectsArray.find(project => project.title == activePage);
 
 
 //forms
-const todopopup = document.querySelector("#todopopup");
+const editPopup = document.querySelector("#editpopup");
+const editform = document.querySelector("#editform");
+
+editform.addEventListener("submit", (event) => {
+    event.preventDefault();
+    console.log(activePage);
+    activePage = pageChanger();
+    let editTitle = editform.elements['title'];
+    let editDescription = editform.elements['description'];
+    let editDate = editform.elements['duedate1'];
+    let editPriority = editform.elements['priority'];
+    let todoToEdit = todoUI().todoFactory(
+        editTitle.value, editDate.value, editDescription.value,
+        editPriority.value, "false");
+    editTodo(todoToEdit, projectsArray.find(project => project.title == activePage));
+    if (activePage != "all") {
+        editTodo(todoToEdit, projectsArray.find(project => project.title == "all"));
+    }
+    if (todoToEdit.date != currentDate){
+        editTodo(todoToEdit, projectsArray.find(project => project.title == "dueToday"), "remove");
+    } else if (todoToEdit.date == currentDate && activePage != "dueToday") {
+        editTodo(todoToEdit, projectsArray.find(project => project.title == "dueToday"));
+    }
+    if (thisWeek(todoToEdit.date) != true){
+        editTodo(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"), "remove");
+    }   else if (thisWeek(todoToEdit.date) == true && activePage != "dueThisWeek") {
+        editTodo(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"));
+    }
+    editPopup.style.display = 'none';
+    pageChanger(activePage, projectsArray);
+});
+
+//todoform
+const todoPopup = document.querySelector("#todopopup");
+const projectPopup = document.querySelector("#projectpopup");
 const todoform = document.querySelector("#todoform");
 todoform.addEventListener("submit", (event) => {
     activePage = pageChanger();
@@ -41,13 +75,13 @@ todoform.addEventListener("submit", (event) => {
     let todoDescription = todoform.elements['description'];
     let todoDate = todoform.elements['duedate'];
     let todoPriority = todoform.elements['priority'];
-    let todoCompleted = todoform.elements['completed'];
+
 
     let todoToAdd = todoUI().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value,
         todoPriority.value, "false");
 
-    if(todoUI().checkDuplicate(todoToAdd, projectsArray.find(project => project.title == "all"))) {
+    if (todoUI().checkDuplicate(todoToAdd, projectsArray.find(project => project.title == "all"))) {
         todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
         if (activePage != "all") {
             todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
@@ -58,7 +92,7 @@ todoform.addEventListener("submit", (event) => {
         if (thisWeek(todoToAdd.date) == true && activePage != "dueThisWeek") {
             todoUI().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
         }
-        todoPopup.style.display ='none';
+        todoPopup.style.display = 'none';
     } else {
         alert("Can't add duplicate todo");
     }
@@ -67,23 +101,24 @@ todoform.addEventListener("submit", (event) => {
     event.preventDefault();
 });
 
-
+//project form
 const projectform = document.querySelector("#projectform");
 projectform.addEventListener("submit", (event) => {
+    event.preventDefault();
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
     let projectToAdd = projectUI().projectFactory(
-        projectTitle.value, [], projectDescription.value);
-    console.log(projectToAdd);
+        projectTitle.value, [], projectDescription.value);;
     projectUI().addProject(projectToAdd, projectsArray);
-    console.log(projectsArray);
+    projectPopup.style.display = 'none';
     //projectform.reset();
-    event.preventDefault();
+    
     //adds to dom
 
 });
 
 function thisWeek(date) {
+    console.log(date);
     let dayOf = date.slice(3, 5)
     let todaytest = todayDate.getDate();
     let endofweek = todaytest + 7;

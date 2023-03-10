@@ -1,10 +1,16 @@
 import { projectUI } from "./project";
+import { todoUI } from "./todo";
 let activePage = "all";
 let activeProject;
 let projectArray;
 const displayDiv = document.querySelector("#display");
+const todoPopup = document.querySelector("#todopopup");
+const editPopup = document.querySelector("#editpopup");
+const editform = document.querySelector("#editform");
+const projectPopup = document.querySelector("#projectpopup");
 const actualList = document.querySelector(".actualList");
 let isButtonUp = true;
+let oldTodo;
 
 export function initialPageLoad() {
     getDate()
@@ -17,7 +23,7 @@ export function initialPageLoad() {
     const allTodos = document.createElement("li");
     allTodos.addEventListener("click", (event) => {
         pageChanger("all");
-        if (isButtonUp === false){
+        if (isButtonUp === false) {
             addTodoButton.style.display = "table";
             isButtonUp = true;
         }
@@ -27,7 +33,7 @@ export function initialPageLoad() {
     const dueToday = document.createElement("li");
     dueToday.addEventListener("click", (event) => {
         pageChanger("dueToday")
-        if (isButtonUp === true){
+        if (isButtonUp === true) {
             addTodoButton.style.display = "none";
             isButtonUp = false;
         }
@@ -38,7 +44,7 @@ export function initialPageLoad() {
     const dueWeek = document.createElement("li");
     dueWeek.addEventListener("click", (event) => {
         pageChanger("dueThisWeek");
-        if (isButtonUp === true){
+        if (isButtonUp === true) {
             addTodoButton.style.display = "none";
             isButtonUp = false;
         }
@@ -54,24 +60,34 @@ export function initialPageLoad() {
     sidebarList.appendChild(projectsList);
     sidebarList.appendChild(actualList);
     sidebarDiv.appendChild(sidebarList);
-    //things do today
-    //things due this week
-    //Projects with list of projects inside
-    //button to add projects
-
-
-
-    //displays the todo's for whatever is selected on sidebar
-    //button to add todo's
 
 
     //Div for content panel which includes invisble forms for todos and projects
     const contentDiv = document.querySelector("#content");
     const addTodoButton = document.createElement("button");
+    addTodoButton.addEventListener("click", (event) => {
+        showTodoForm();
+    });
     addTodoButton.classList.add("addTodoButton");
-    addTodoButton.textContent ="Add A New Todo";
+    addTodoButton.textContent = "Add A New Todo";
     contentDiv.appendChild(addTodoButton);
 
+    const addProjectButton = document.createElement("button");
+    addProjectButton.classList.add("addProjectButton");
+    addProjectButton.textContent = "Add A New Project";
+    addProjectButton.addEventListener("click", (event) => {
+        showProjectForm();
+    });
+    contentDiv.appendChild(addProjectButton);
+
+    const deleteProjectBtn = document.createElement("button");
+    deleteProjectBtn.addEventListener("click", (event) => {
+        deleteProject();
+        deleteProjectBtn.style.display = "none";
+    });
+    deleteProjectBtn.classList.add("deleteProjectButton");
+    deleteProjectBtn.textContent = "Delete Project";
+    contentDiv.appendChild(deleteProjectBtn);
 }
 
 export function pageChanger(newPage, array) {
@@ -106,23 +122,32 @@ function contentChanger(page, array) {
             let todoTitle = document.createElement("p");
             let todoDescription = document.createElement("p");
             let todoDate = document.createElement("p");
-            if (todo.priority == "light"){
+            if (todo.priority == "light") {
                 todoDiv.style.backgroundColor = "lightgreen";
             }
-            if (todo.priority == "normal"){
+            if (todo.priority == "normal") {
                 todoDiv.style.backgroundColor = "#bbd652";
             }
-            if (todo.priority == "urgent"){
+            if (todo.priority == "urgent") {
                 todoDiv.style.backgroundColor = "lightcoral";
             }
-            //delete button stuff
+            //edit/delete button stuff
             let buttonsCtn = document.createElement("div");
             buttonsCtn.classList.add("buttonContainer");
+            let editTodoBtn = document.createElement("button");
+            editTodoBtn.classList.add("editTodoButton");
+            editTodoBtn.textContent = "Edit";
+            editTodoBtn.addEventListener("click", (event) => {
+                oldTodo = todo;
+                editPopup.style.display = "table";
+            });
+            buttonsCtn.appendChild(editTodoBtn);
+
             let deleteTodoBtn = document.createElement("button");
             deleteTodoBtn.classList.add("deleteTodoButton");
             deleteTodoBtn.textContent = "Delete";
             deleteTodoBtn.addEventListener("click", (event) => {
-                deleteTodo(todo,activeProject,array);
+                deleteTodo(todo, activeProject, array);
             });
             buttonsCtn.appendChild(deleteTodoBtn);
 
@@ -141,21 +166,18 @@ function contentChanger(page, array) {
 }
 
 //deletes todos
-function deleteTodo(todo, array, projectsarray){
-    console.log(projectsarray[0]);
-    console.log(projectsarray[1]);
-    console.log(projectsarray[2]);
+function deleteTodo(todo, array, projectsarray) {
     let deletedTodo = array.todoList.find(project => project.title == todo.title);
     console.log(deletedTodo);
-    if((projectsarray[0].todoList.indexOf(deletedTodo)) != -1){
+    if ((projectsarray[0].todoList.indexOf(deletedTodo)) != -1) {
         let allIndex = (projectsarray[0].todoList.indexOf(deletedTodo));
         projectsarray[0].todoList.splice(allIndex, 1);
     }
-    if((projectsarray[1].todoList.indexOf(deletedTodo)) != -1){
+    if ((projectsarray[1].todoList.indexOf(deletedTodo)) != -1) {
         let dayIndex = (projectsarray[1].todoList.indexOf(deletedTodo));
         projectsarray[1].todoList.splice(dayIndex, 1);
     }
-    if((projectsarray[2].todoList.indexOf(deletedTodo)) != -1){
+    if ((projectsarray[2].todoList.indexOf(deletedTodo)) != -1) {
         let weekIndex = (projectsarray[2].todoList.indexOf(deletedTodo));
         projectsarray[2].todoList.splice(weekIndex, 1);
     }
@@ -166,18 +188,54 @@ function deleteTodo(todo, array, projectsarray){
     pageChanger();
 }
 
-function showTodoForm(){
-    const todopopup = document.querySelector("#todopopup");
-    todoPopup.style.display ='table';
+function deleteProject(){
+    let pageToDelete = pageChanger();
+    let test = "." + pageToDelete;
+    const projectList = document.querySelector(test);
+    projectList.remove();
+    let testPage = projectArray.findIndex(element => element.title === pageToDelete);
+    if(testPage != undefined){
+        projectArray.splice(testPage, 1);
+        console.log(projectArray);
+        pageChanger("all");
+    } 
 }
 
-export function buttonAppear(){
+
+
+export function editTodo(todo, array, remove) {
+    if (remove != "remove") {
+        let editedTodo = oldTodo;
+        let newTodo = todo;
+        let index = array.todoList.indexOf(editedTodo);
+        array.todoList[index] = newTodo;
+    } else {
+        let editedTodo = oldTodo;
+        let index = array.todoList.indexOf(editedTodo);
+        array.todoList.splice(index, 1);
+    }
+    pageChanger();
+    
+
+    // }
+}
+
+function showTodoForm() {
+    todoPopup.style.display = 'table';
+}
+
+function showProjectForm() {
+    projectPopup.style.display = 'table';
+}
+
+export function buttonAppear() {
     const addTodoButton = document.querySelector(".addTodoButton");
     addTodoButton.style.display = "table";
     isButtonUp = true;
 }
 //gets the current date
-function getDate(){
+function getDate() {
     var today = new Date();
     document.getElementById("duedate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+    document.getElementById("duedate1").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 }
