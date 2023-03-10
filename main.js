@@ -62,6 +62,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _initial_page_load__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 
+let c = "";
 
 const projectsArray = [];
 const date = new Date();
@@ -72,9 +73,9 @@ let currentDate = `${month}-${day}-${year}`;
 let nextWeekDate = `${month}-${day+7}-${year}`;
 const projectUI = () => {
 
-    const projectFactory = (title, todoList, description, deadline) => {
+    const projectFactory = (title, todoList, description,) => {
 
-        return { title, todoList, description, deadline };
+        return { title, todoList, description,};
     }
 
     function setUpArray() {
@@ -105,18 +106,38 @@ const projectUI = () => {
     // projectsArray.push(defaultProject);
 
     function addProject(project, array) {
-        if (project.title != "all" && project.title != "dueToday" && project.title != "dueThisWeek"){
-            const projectTitle = project.title;
+        if (!exists(project,array)){
+
+            if (project.title != "all" && project.title != "dueToday" && project.title != "dueThisWeek"){
+                const projectTitle = project.title;
             const divAdd = document.createElement("li");
+            divAdd.classList.add(project.title);
             divAdd.addEventListener("click", (event) => {
                 (0,_initial_page_load__WEBPACK_IMPORTED_MODULE_0__.pageChanger)(projectTitle);
                 (0,_initial_page_load__WEBPACK_IMPORTED_MODULE_0__.buttonAppear)();
+                deleteProjectBtn();
             });
             divAdd.textContent = projectTitle;
             actualList.appendChild(divAdd);
-        }
-        array.push(project);
-        return array;
+        } 
+            array.push(project);
+            return array;
+        }  
+    }
+
+    function deleteProjectBtn(){
+        const deleteProjectButton = document.querySelector(".deleteProjectButton");
+        deleteProjectButton.style.display = "table";
+    }
+
+    function exists(project, array){
+        let b = project.title;
+        c = array.find(project => project.title === b);
+        if (c != undefined){
+            if(c.title === b){
+                return true;
+            }
+         }
     }
 
     return { projectFactory, addProject, setUpArray };
@@ -130,17 +151,25 @@ const projectUI = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "buttonAppear": () => (/* binding */ buttonAppear),
+/* harmony export */   "editTodo": () => (/* binding */ editTodo),
 /* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad),
 /* harmony export */   "pageChanger": () => (/* binding */ pageChanger)
 /* harmony export */ });
 /* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
+
 
 let activePage = "all";
 let activeProject;
 let projectArray;
 const displayDiv = document.querySelector("#display");
+const todoPopup = document.querySelector("#todopopup");
+const editPopup = document.querySelector("#editpopup");
+const editform = document.querySelector("#editform");
+const projectPopup = document.querySelector("#projectpopup");
 const actualList = document.querySelector(".actualList");
 let isButtonUp = true;
+let oldTodo;
 
 function initialPageLoad() {
     getDate()
@@ -153,7 +182,7 @@ function initialPageLoad() {
     const allTodos = document.createElement("li");
     allTodos.addEventListener("click", (event) => {
         pageChanger("all");
-        if (isButtonUp === false){
+        if (isButtonUp === false) {
             addTodoButton.style.display = "table";
             isButtonUp = true;
         }
@@ -163,7 +192,7 @@ function initialPageLoad() {
     const dueToday = document.createElement("li");
     dueToday.addEventListener("click", (event) => {
         pageChanger("dueToday")
-        if (isButtonUp === true){
+        if (isButtonUp === true) {
             addTodoButton.style.display = "none";
             isButtonUp = false;
         }
@@ -174,7 +203,7 @@ function initialPageLoad() {
     const dueWeek = document.createElement("li");
     dueWeek.addEventListener("click", (event) => {
         pageChanger("dueThisWeek");
-        if (isButtonUp === true){
+        if (isButtonUp === true) {
             addTodoButton.style.display = "none";
             isButtonUp = false;
         }
@@ -190,24 +219,34 @@ function initialPageLoad() {
     sidebarList.appendChild(projectsList);
     sidebarList.appendChild(actualList);
     sidebarDiv.appendChild(sidebarList);
-    //things do today
-    //things due this week
-    //Projects with list of projects inside
-    //button to add projects
-
-
-
-    //displays the todo's for whatever is selected on sidebar
-    //button to add todo's
 
 
     //Div for content panel which includes invisble forms for todos and projects
     const contentDiv = document.querySelector("#content");
     const addTodoButton = document.createElement("button");
+    addTodoButton.addEventListener("click", (event) => {
+        showTodoForm();
+    });
     addTodoButton.classList.add("addTodoButton");
-    addTodoButton.textContent ="Add A New Todo";
+    addTodoButton.textContent = "Add A New Todo";
     contentDiv.appendChild(addTodoButton);
 
+    const addProjectButton = document.createElement("button");
+    addProjectButton.classList.add("addProjectButton");
+    addProjectButton.textContent = "Add A New Project";
+    addProjectButton.addEventListener("click", (event) => {
+        showProjectForm();
+    });
+    contentDiv.appendChild(addProjectButton);
+
+    const deleteProjectBtn = document.createElement("button");
+    deleteProjectBtn.addEventListener("click", (event) => {
+        deleteProject();
+        deleteProjectBtn.style.display = "none";
+    });
+    deleteProjectBtn.classList.add("deleteProjectButton");
+    deleteProjectBtn.textContent = "Delete Project";
+    contentDiv.appendChild(deleteProjectBtn);
 }
 
 function pageChanger(newPage, array) {
@@ -242,23 +281,32 @@ function contentChanger(page, array) {
             let todoTitle = document.createElement("p");
             let todoDescription = document.createElement("p");
             let todoDate = document.createElement("p");
-            if (todo.priority == "light"){
+            if (todo.priority == "light") {
                 todoDiv.style.backgroundColor = "lightgreen";
             }
-            if (todo.priority == "normal"){
+            if (todo.priority == "normal") {
                 todoDiv.style.backgroundColor = "#bbd652";
             }
-            if (todo.priority == "urgent"){
+            if (todo.priority == "urgent") {
                 todoDiv.style.backgroundColor = "lightcoral";
             }
-            //delete button stuff
+            //edit/delete button stuff
             let buttonsCtn = document.createElement("div");
             buttonsCtn.classList.add("buttonContainer");
+            let editTodoBtn = document.createElement("button");
+            editTodoBtn.classList.add("editTodoButton");
+            editTodoBtn.textContent = "Edit";
+            editTodoBtn.addEventListener("click", (event) => {
+                oldTodo = todo;
+                editPopup.style.display = "table";
+            });
+            buttonsCtn.appendChild(editTodoBtn);
+
             let deleteTodoBtn = document.createElement("button");
             deleteTodoBtn.classList.add("deleteTodoButton");
             deleteTodoBtn.textContent = "Delete";
             deleteTodoBtn.addEventListener("click", (event) => {
-                deleteTodo(todo,activeProject,array);
+                deleteTodo(todo, activeProject, array);
             });
             buttonsCtn.appendChild(deleteTodoBtn);
 
@@ -277,21 +325,18 @@ function contentChanger(page, array) {
 }
 
 //deletes todos
-function deleteTodo(todo, array, projectsarray){
-    console.log(projectsarray[0]);
-    console.log(projectsarray[1]);
-    console.log(projectsarray[2]);
+function deleteTodo(todo, array, projectsarray) {
     let deletedTodo = array.todoList.find(project => project.title == todo.title);
     console.log(deletedTodo);
-    if((projectsarray[0].todoList.indexOf(deletedTodo)) != -1){
+    if ((projectsarray[0].todoList.indexOf(deletedTodo)) != -1) {
         let allIndex = (projectsarray[0].todoList.indexOf(deletedTodo));
         projectsarray[0].todoList.splice(allIndex, 1);
     }
-    if((projectsarray[1].todoList.indexOf(deletedTodo)) != -1){
+    if ((projectsarray[1].todoList.indexOf(deletedTodo)) != -1) {
         let dayIndex = (projectsarray[1].todoList.indexOf(deletedTodo));
         projectsarray[1].todoList.splice(dayIndex, 1);
     }
-    if((projectsarray[2].todoList.indexOf(deletedTodo)) != -1){
+    if ((projectsarray[2].todoList.indexOf(deletedTodo)) != -1) {
         let weekIndex = (projectsarray[2].todoList.indexOf(deletedTodo));
         projectsarray[2].todoList.splice(weekIndex, 1);
     }
@@ -302,20 +347,56 @@ function deleteTodo(todo, array, projectsarray){
     pageChanger();
 }
 
-function showTodoForm(){
-    const todopopup = document.querySelector("#todopopup");
-    todoPopup.style.display ='table';
+function deleteProject(){
+    let pageToDelete = pageChanger();
+    let test = "." + pageToDelete;
+    const projectList = document.querySelector(test);
+    projectList.remove();
+    let testPage = projectArray.findIndex(element => element.title === pageToDelete);
+    if(testPage != undefined){
+        projectArray.splice(testPage, 1);
+        console.log(projectArray);
+        pageChanger("all");
+    } 
 }
 
-function buttonAppear(){
+
+
+function editTodo(todo, array, remove) {
+    if (remove != "remove") {
+        let editedTodo = oldTodo;
+        let newTodo = todo;
+        let index = array.todoList.indexOf(editedTodo);
+        array.todoList[index] = newTodo;
+    } else {
+        let editedTodo = oldTodo;
+        let index = array.todoList.indexOf(editedTodo);
+        array.todoList.splice(index, 1);
+    }
+    pageChanger();
+    
+
+    // }
+}
+
+function showTodoForm() {
+    todoPopup.style.display = 'table';
+}
+
+function showProjectForm() {
+    projectPopup.style.display = 'table';
+}
+
+function buttonAppear() {
     const addTodoButton = document.querySelector(".addTodoButton");
     addTodoButton.style.display = "table";
     isButtonUp = true;
 }
 //gets the current date
-function getDate(){
+function getDate() {
     var today = new Date();
     document.getElementById("duedate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+    document.getElementById("duedate1").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 }
 
 
@@ -418,7 +499,41 @@ let activeProject = projectsArray.find(project => project.title == activePage);
 
 
 //forms
-const todopopup = document.querySelector("#todopopup");
+const editPopup = document.querySelector("#editpopup");
+const editform = document.querySelector("#editform");
+
+editform.addEventListener("submit", (event) => {
+    event.preventDefault();
+    console.log(activePage);
+    activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)();
+    let editTitle = editform.elements['title'];
+    let editDescription = editform.elements['description'];
+    let editDate = editform.elements['duedate1'];
+    let editPriority = editform.elements['priority'];
+    let todoToEdit = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
+        editTitle.value, editDate.value, editDescription.value,
+        editPriority.value, "false");
+    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == activePage));
+    if (activePage != "all") {
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "all"));
+    }
+    if (todoToEdit.date != currentDate){
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueToday"), "remove");
+    } else if (todoToEdit.date == currentDate && activePage != "dueToday") {
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueToday"));
+    }
+    if (thisWeek(todoToEdit.date) != true){
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"), "remove");
+    }   else if (thisWeek(todoToEdit.date) == true && activePage != "dueThisWeek") {
+        (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.editTodo)(todoToEdit, projectsArray.find(project => project.title == "dueThisWeek"));
+    }
+    editPopup.style.display = 'none';
+    (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)(activePage, projectsArray);
+});
+
+//todoform
+const todoPopup = document.querySelector("#todopopup");
+const projectPopup = document.querySelector("#projectpopup");
 const todoform = document.querySelector("#todoform");
 todoform.addEventListener("submit", (event) => {
     activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_2__.pageChanger)();
@@ -426,13 +541,13 @@ todoform.addEventListener("submit", (event) => {
     let todoDescription = todoform.elements['description'];
     let todoDate = todoform.elements['duedate'];
     let todoPriority = todoform.elements['priority'];
-    let todoCompleted = todoform.elements['completed'];
+
 
     let todoToAdd = (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().todoFactory(
         todoTitle.value, todoDate.value, todoDescription.value,
         todoPriority.value, "false");
 
-    if((0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().checkDuplicate(todoToAdd, projectsArray.find(project => project.title == "all"))) {
+    if ((0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().checkDuplicate(todoToAdd, projectsArray.find(project => project.title == "all"))) {
         (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == activePage));
         if (activePage != "all") {
             (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "all"));
@@ -443,7 +558,7 @@ todoform.addEventListener("submit", (event) => {
         if (thisWeek(todoToAdd.date) == true && activePage != "dueThisWeek") {
             (0,_modules_todo__WEBPACK_IMPORTED_MODULE_0__.todoUI)().addTodo(todoToAdd, projectsArray.find(project => project.title == "dueThisWeek"));
         }
-        todoPopup.style.display ='none';
+        todoPopup.style.display = 'none';
     } else {
         alert("Can't add duplicate todo");
     }
@@ -452,23 +567,24 @@ todoform.addEventListener("submit", (event) => {
     event.preventDefault();
 });
 
-
+//project form
 const projectform = document.querySelector("#projectform");
 projectform.addEventListener("submit", (event) => {
+    event.preventDefault();
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
     let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().projectFactory(
-        projectTitle.value, [], projectDescription.value);
-    console.log(projectToAdd);
+        projectTitle.value, [], projectDescription.value);;
     (0,_modules_project__WEBPACK_IMPORTED_MODULE_1__.projectUI)().addProject(projectToAdd, projectsArray);
-    console.log(projectsArray);
+    projectPopup.style.display = 'none';
     //projectform.reset();
-    event.preventDefault();
+    
     //adds to dom
 
 });
 
 function thisWeek(date) {
+    console.log(date);
     let dayOf = date.slice(3, 5)
     let todaytest = todayDate.getDate();
     let endofweek = todaytest + 7;

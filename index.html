@@ -9,7 +9,9 @@
     <title>Todo List</title>
 </head>
 <body>
-    <div id="header"></div>
+    <div id="header">
+        <h1>Your Todo List!</h1>
+    </div>
 
     <div id="todopopup">
         <!--Form for todo's -->
@@ -26,6 +28,24 @@
                 <label>Urgent</label><input type="radio" value="urgent" name="priority"/>
             </div>
             <button type="submit" form="todoform" id="todosubmitBtn">Add Todo</button>
+        </form>
+    </div>
+
+    <div id="editpopup">
+        <!--Form for edting todo's -->
+        <form id="editform" action="" method="get"> 
+            <div class="inputOne">
+                <input type="text" id='title' name='title' placeholder="Task" required>
+                <input type="date" id='duedate1' min="2023-01-01" max ="2023-12-31" required>
+                <input type="text" id='description' placeholder="Description" >
+            </div>
+            <div class="inputTwo">
+                <label>Priority:</label>
+                <label>Light</label><input type="radio" value="light" name="priority"  />
+                <label>Normal</label><input type="radio" value="normal" name="priority"/>
+                <label>Urgent</label><input type="radio" value="urgent" name="priority"/>
+            </div>
+            <button type="submit" form="editform" id="editsubmitBtn">Edit Todo</button>
         </form>
     </div>
 
