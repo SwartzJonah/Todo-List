@@ -19,9 +19,9 @@ let currentDate = `${month}-${day}-${year}`;
 //starter states
 initialPageLoad();
 //sets up initial array
-getStorage();
-const projectsArray = projectUI().setUpArray();
 
+const projectsArray = projectUI().setUpArray();
+getStorage(projectsArray);
 //This will tell file what project is open
 let activePage = pageChanger("all", projectsArray);
 
@@ -115,7 +115,7 @@ projectform.addEventListener("submit", (event) => {
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
     let projectToAdd = projectUI().projectFactory(
-        projectTitle.value, [], projectDescription.value);;
+        projectTitle.value, [], projectDescription.value);
     projectUI().addProject(projectToAdd, projectsArray);
     projectPopup.style.display = 'none';
     projectform.reset();

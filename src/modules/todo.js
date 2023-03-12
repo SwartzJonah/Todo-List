@@ -2,11 +2,14 @@ export const todoUI= () => {
 
     const todoFactory = (title, dueDate, description, priority, checkbox) => {
         let date = dueDate;
+        if (checkbox === "false"){
         let month = date.slice(5,7);
         let day = date.slice(8,10);
         let year = date.slice(0,4);
         date = `${month}-${day}-${year}`;
+        }
         let tempTitle = title;
+        console.log(tempTitle);
         let tempLetter = tempTitle.charAt(0).toUpperCase();
         let remains = tempTitle.slice(1);
         title = tempLetter + remains;

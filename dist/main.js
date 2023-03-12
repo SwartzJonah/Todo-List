@@ -7,17 +7,91 @@
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getStorage": () => (/* binding */ getStorage),
+/* harmony export */   "setStorage": () => (/* binding */ setStorage)
+/* harmony export */ });
+/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+
+
+
+function getStorage(projectsArray) {
+    let newArray = projectsArray;
+    for (let i = 0; i < localStorage.getItem("storageLength"); i++) {
+        if (i < 2) {
+            let projectLength = localStorage.getItem("project" + i + "length");
+        }
+        if (i > 2) {
+            let projectTitle = localStorage.getItem("project" + i + "title");
+            let projectDescription = localStorage.getItem("project" + i + "description");
+            let projectLength = localStorage.getItem("project" + i + "length");
+            let projectToAdd = (0,_project__WEBPACK_IMPORTED_MODULE_0__.projectUI)().projectFactory(
+                projectTitle, [], projectDescription);
+            (0,_project__WEBPACK_IMPORTED_MODULE_0__.projectUI)().addProject(projectToAdd, newArray);
+        }
+        let projectLength = localStorage.getItem("project" + i + "length");
+        for (let j = 0; j < projectLength; j++) {
+            let todoTitle = (localStorage.getItem("project" + i + "todolist" + j + "title"));
+            let todoDescription = (localStorage.getItem("project" + i + "todolist" + j + "description"));
+            let todoDate = (localStorage.getItem("project" + i + "todolist" + j + "date"));
+            let todoPriority = (localStorage.getItem("project" + i + "todolist" + j + "priority"));
+            let todoToAdd = (0,_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().todoFactory(
+                todoTitle, todoDate, todoDescription,
+                todoPriority, "true");
+                (0,_todo__WEBPACK_IMPORTED_MODULE_1__.todoUI)().addTodo(todoToAdd, newArray[i]);
+        }
+    }
+    console.log(projectsArray);
+}
+
+function setStorage(projectArray) {
+    let storageArray = projectArray;
+    let storageArrayLength = storageArray.length;
+    localStorage.setItem("storageLength", storageArrayLength);
+    console.log(storageArrayLength);
+    for (let i = 0; i < storageArray.length; i++) {
+        let project = storageArray[i];
+        let projectTitle = project.title;
+        let projectDescription = project.description;
+        let projectLength = project.todoList.length;
+        localStorage.setItem("project" + i + "title", projectTitle);
+        localStorage.setItem("project" + i + "description", projectDescription);
+        localStorage.setItem("project" + i + "length", projectLength);
+        console.log(projectLength);
+        for (let j = 0; j < project.todoList.length; j++) {
+            let todo = project.todoList[j];
+            let todoTitle = todo.title;
+            let todoDate = todo.date;
+            let todoDescription = todo.description;
+            let todoPriority = todo.priority;
+            localStorage.setItem("project" + i + "todolist" + j + "title", todoTitle);
+            localStorage.setItem("project" + i + "todolist" + j + "date", todoDate);
+            localStorage.setItem("project" + i + "todolist" + j + "description", todoDescription);
+            localStorage.setItem("project" + i + "todolist" + j + "priority", todoPriority);
+        }
+    }
+}
+
+/***/ }),
+/* 2 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "todoUI": () => (/* binding */ todoUI)
 /* harmony export */ });
 const todoUI= () => {
 
     const todoFactory = (title, dueDate, description, priority, checkbox) => {
         let date = dueDate;
+        if (checkbox === "false"){
         let month = date.slice(5,7);
         let day = date.slice(8,10);
         let year = date.slice(0,4);
         date = `${month}-${day}-${year}`;
+        }
         let tempTitle = title;
+        console.log(tempTitle);
         let tempLetter = tempTitle.charAt(0).toUpperCase();
         let remains = tempTitle.slice(1);
         title = tempLetter + remains;
@@ -57,14 +131,14 @@ return{ todoFactory, addTodo, checkDuplicate };
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "projectUI": () => (/* binding */ projectUI)
 /* harmony export */ });
-/* harmony import */ var _initial_page_load__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _initial_page_load__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
 
 let c = "";
 
@@ -156,7 +230,7 @@ const projectUI = () => {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -167,9 +241,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "initialPageLoad": () => (/* binding */ initialPageLoad),
 /* harmony export */   "pageChanger": () => (/* binding */ pageChanger)
 /* harmony export */ });
-/* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
-/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
+/* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _project__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _todo__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
 
 
 
@@ -434,51 +508,6 @@ function getDate() {
 }
 
 
-/***/ }),
-/* 4 */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "getStorage": () => (/* binding */ getStorage),
-/* harmony export */   "setStorage": () => (/* binding */ setStorage)
-/* harmony export */ });
-
-
-function getStorage() {
-    //let storageArray = localStorage.getItem("data");
-    // console.log(storageArray);
-}
-
-function setStorage(projectArray) {
-    let storageArray = projectArray;
-    console.log(storageArray);
-    for (let i = 0; i < storageArray.length; i++) {
-        let project = storageArray[i];
-        for (let j = 0; j < project.todoList.length; j++) {
-            let todo = project.todoList[j];
-            let todoTitle = todo.title;
-            let todoDate = todo.date;
-            let todoDescription = todo.description;
-            let todoPriority = todo.priority;
-            localStorage.setItem("project" + i + "todolist" + j + "title", todoTitle);
-            localStorage.setItem("project" + i + "todolist" + j + "date", todoDate);
-            localStorage.setItem("project" + i + "todolist" + j + "description", todoDescription);
-            localStorage.setItem("project" + i + "todolist" + j + "priority", todoPriority);
-            
-        }
-    }
-    // for (let i = 0; i < storageArray.length; i++) { 
-    //     let project = storageArray[i];  
-    //     for (let j = 0; j < project.todoList.length; j++) {
-    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "title"));
-    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "date"));
-    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "description"));
-    //         console.log(localStorage.getItem("project" + i + "todolist" + j + "priority"));
-    //     }
-    // }
-}
-
 /***/ })
 /******/ 	]);
 /************************************************************************/
@@ -540,10 +569,10 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _modules_storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
-/* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
-/* harmony import */ var _modules_project__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
-/* harmony import */ var _modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3);
+/* harmony import */ var _modules_storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _modules_todo__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _modules_project__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var _modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
 
 
 
@@ -565,9 +594,9 @@ let currentDate = `${month}-${day}-${year}`;
 //starter states
 (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.initialPageLoad)();
 //sets up initial array
-(0,_modules_storage__WEBPACK_IMPORTED_MODULE_0__.getStorage)();
-const projectsArray = (0,_modules_project__WEBPACK_IMPORTED_MODULE_2__.projectUI)().setUpArray();
 
+const projectsArray = (0,_modules_project__WEBPACK_IMPORTED_MODULE_2__.projectUI)().setUpArray();
+(0,_modules_storage__WEBPACK_IMPORTED_MODULE_0__.getStorage)(projectsArray);
 //This will tell file what project is open
 let activePage = (0,_modules_initial_page_load__WEBPACK_IMPORTED_MODULE_3__.pageChanger)("all", projectsArray);
 
@@ -661,7 +690,7 @@ projectform.addEventListener("submit", (event) => {
     let projectTitle = projectform.elements['title'];
     let projectDescription = projectform.elements['description']
     let projectToAdd = (0,_modules_project__WEBPACK_IMPORTED_MODULE_2__.projectUI)().projectFactory(
-        projectTitle.value, [], projectDescription.value);;
+        projectTitle.value, [], projectDescription.value);
     (0,_modules_project__WEBPACK_IMPORTED_MODULE_2__.projectUI)().addProject(projectToAdd, projectsArray);
     projectPopup.style.display = 'none';
     projectform.reset();
